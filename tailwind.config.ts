@@ -1,3 +1,4 @@
+
 import type { Config } from "tailwindcss";
 
 export default {
@@ -61,12 +62,25 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				// Custom theme colors
+				'sky-blue': 'hsl(var(--sky-blue))',
+				'mint-green': 'hsl(var(--mint-green))',
+				'coral-pink': 'hsl(var(--coral-pink))',
+				'sunshine-yellow': 'hsl(var(--sunshine-yellow))',
 			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
 				sm: 'calc(var(--radius) - 4px)'
+			},
+			fontFamily: {
+				'comic': ['"Comic Neue"', 'cursive'],
+				'nunito': ['"Nunito"', 'sans-serif'],
+			},
+			backgroundImage: {
+				'gradient-young': 'linear-gradient(135deg, hsl(var(--sky-blue)), hsl(var(--mint-green)))',
+				'gradient-teen': 'linear-gradient(135deg, hsl(220, 70%, 60%), hsl(280, 60%, 75%))',
 			},
 			keyframes: {
 				'accordion-down': {
@@ -84,11 +98,27 @@ export default {
 					to: {
 						height: '0'
 					}
+				},
+				'float': {
+					'0%, 100%': { transform: 'translateY(0)' },
+					'50%': { transform: 'translateY(-10px)' }
+				},
+				'wave': {
+					'0%': { transform: 'rotate(0deg)' },
+					'10%': { transform: 'rotate(14deg)' },
+					'20%': { transform: 'rotate(-8deg)' },
+					'30%': { transform: 'rotate(14deg)' },
+					'40%': { transform: 'rotate(-4deg)' },
+					'50%': { transform: 'rotate(10deg)' },
+					'60%': { transform: 'rotate(0deg)' },
+					'100%': { transform: 'rotate(0deg)' },
 				}
 			},
 			animation: {
 				'accordion-down': 'accordion-down 0.2s ease-out',
-				'accordion-up': 'accordion-up 0.2s ease-out'
+				'accordion-up': 'accordion-up 0.2s ease-out',
+				'float': 'float 3s ease-in-out infinite',
+				'wave': 'wave 2s ease-in-out infinite'
 			}
 		}
 	},

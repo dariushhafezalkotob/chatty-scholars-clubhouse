@@ -1,3 +1,6 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700&family=Comic+Neue:wght@400;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -32,23 +35,47 @@
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 1rem;
+
+    /* Custom theme colors for kids app */
+    --sky-blue: 200 90% 70%;
+    --mint-green: 150 60% 80%;
+    --coral-pink: 10 90% 80%;
+    --sunshine-yellow: 50 90% 80%;
+    
+    /* Theme-specific colors for different age groups */
+    --young-primary: var(--sky-blue);
+    --young-secondary: var(--mint-green);
+    --young-accent: var(--sunshine-yellow);
+    
+    --teen-primary: 220 70% 60%;
+    --teen-secondary: 280 60% 75%;
+    --teen-accent: 320 70% 70%;
 
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  
+  /* Young kids theme (7-12) */
+  .young-theme {
+    --primary: var(--young-primary);
+    --secondary: var(--young-secondary);
+    --accent: var(--young-accent);
+    font-family: 'Comic Neue', sans-serif;
+  }
+  
+  /* Teen theme (13-18) */
+  .teen-theme {
+    --primary: var(--teen-primary);
+    --secondary: var(--teen-secondary);
+    --accent: var(--teen-accent);
+    font-family: 'Nunito', sans-serif;
   }
 
   .dark {
@@ -97,5 +124,41 @@
 
   body {
     @apply bg-background text-foreground;
+    font-family: 'Nunito', sans-serif;
+  }
+  
+  /* Animation classes */
+  .bounce {
+    animation: bounce 1s infinite alternate;
+  }
+  
+  @keyframes bounce {
+    from {
+      transform: translateY(0px);
+    }
+    to {
+      transform: translateY(-10px);
+    }
+  }
+  
+  .pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.7;
+    }
+  }
+  
+  .micro-pop {
+    transition: transform 0.2s ease;
+  }
+  
+  .micro-pop:active {
+    transform: scale(0.95);
   }
 }
