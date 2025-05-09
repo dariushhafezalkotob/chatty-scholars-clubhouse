@@ -5,9 +5,11 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import SubjectsSidebar from './SubjectsSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Moon, Sun } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const AppLayout = () => {
-  const { themeClass } = useTheme();
+  const { themeClass, colorMode, toggleColorMode } = useTheme();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
 
@@ -22,6 +24,17 @@ const AppLayout = () => {
           <SubjectsSidebar />
           
           <main className="flex-1 p-4">
+            <div className="flex justify-end mb-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={toggleColorMode}
+                aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+                className="rounded-full"
+              >
+                {colorMode === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+              </Button>
+            </div>
             <Outlet />
           </main>
         </div>

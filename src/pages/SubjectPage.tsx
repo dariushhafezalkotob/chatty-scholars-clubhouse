@@ -44,7 +44,7 @@ const subjects = {
 
 const SubjectPage = () => {
   const { subjectId = 'math' } = useParams();
-  const { ageGroup } = useTheme();
+  const { ageGroup, colorMode } = useTheme();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
   const subject = subjects[subjectId as keyof typeof subjects] || subjects.math;
@@ -58,7 +58,7 @@ const SubjectPage = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className="md:col-span-2 bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-md">
+        <div className={`md:col-span-2 ${colorMode === 'dark' ? 'bg-black/60' : 'bg-white/80'} backdrop-blur-sm p-6 rounded-xl shadow-md`}>
           <ChatInterface 
             subject={subject.name} 
             characterType={subject.character as 'owl' | 'robot' | 'book'} 
