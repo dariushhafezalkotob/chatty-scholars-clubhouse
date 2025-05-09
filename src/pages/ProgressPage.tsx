@@ -6,7 +6,7 @@ import { Progress } from '@/components/ui/progress';
 
 const subjects = [
   { id: 'math', name: 'Mathematics', icon: Compass, progress: 75, stars: 4 },
-  { id: 'science', name: 'Science', icon: LightBulb, progress: 60, stars: 3 },
+  { id: 'science', name: 'Science', icon: Lightbulb, progress: 60, stars: 3 },
   { id: 'english', name: 'Language', icon: Book, progress: 90, stars: 5 },
   { id: 'history', name: 'History', icon: GraduationCap, progress: 40, stars: 2 },
 ];

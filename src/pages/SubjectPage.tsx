@@ -18,7 +18,7 @@ const subjects = {
   },
   science: { 
     name: 'Science', 
-    icon: LightBulb, 
+    icon: Lightbulb, 
     color: 'bg-mint-green',
     character: 'owl',
     welcomeMessage: "Hello curious mind! I'm your Science guide. What shall we discover today?",

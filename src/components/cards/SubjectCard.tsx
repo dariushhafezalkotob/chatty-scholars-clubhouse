@@ -2,12 +2,12 @@
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
-import { Icon } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 
 interface SubjectCardProps {
   name: string;
   description: string;
-  icon: Icon;
+  icon: LucideIcon;
   color: string;
   onClick: () => void;
 }
