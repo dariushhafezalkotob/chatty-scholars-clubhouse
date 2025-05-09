@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Book, Compass, GraduationCap, LightBulb, Star, MessageCircle } from 'lucide-react';
+import { Book, Compass, GraduationCap, Lightbulb, Star, MessageCircle } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import {
   Sidebar,
@@ -18,14 +18,15 @@ import {
 
 const subjects = [
   { id: 'math', name: 'Mathematics', icon: Compass, color: 'bg-sky-blue' },
-  { id: 'science', name: 'Science', icon: LightBulb, color: 'bg-mint-green' },
+  { id: 'science', name: 'Science', icon: Lightbulb, color: 'bg-mint-green' },
   { id: 'english', name: 'Language', icon: Book, color: 'bg-coral-pink' },
   { id: 'history', name: 'History', icon: GraduationCap, color: 'bg-sunshine-yellow' },
 ];
 
 const SubjectsSidebar = () => {
   const { ageGroup } = useTheme();
-  const { collapsed } = useSidebar();
+  const { state } = useSidebar();
+  const collapsed = state === "collapsed";
 
   const getNavClass = ({ isActive }: { isActive: boolean }) =>
     `flex items-center p-3 rounded-lg transition-all micro-pop ${
@@ -37,7 +38,7 @@ const SubjectsSidebar = () => {
   return (
     <Sidebar
       className={`${collapsed ? 'w-0 md:w-16' : 'w-64'} transition-all duration-300 border-r`}
-      collapsible
+      collapsible="icon"
     >
       <div className="flex justify-between items-center p-4">
         {!collapsed && (
@@ -49,7 +50,7 @@ const SubjectsSidebar = () => {
       </div>
 
       <SidebarContent className="p-2">
-        <SidebarGroup defaultOpen>
+        <SidebarGroup>
           <SidebarGroupLabel className={`${ageGroup === 'young' ? 'text-base font-comic' : 'text-sm font-nunito'}`}>
             Subjects
           </SidebarGroupLabel>

@@ -14,8 +14,9 @@ const AppLayout = () => {
   return (
     <div className={`min-h-screen bg-gradient-to-br from-background to-secondary/30 ${themeClass}`}>
       <SidebarProvider
-        defaultCollapsed={isMobile}
-        collapsedWidth={isMobile ? 0 : 60}
+        defaultOpen={!isMobile}
+        open={sidebarOpen}
+        onOpenChange={setSidebarOpen}
       >
         <div className="flex min-h-screen w-full">
           <SubjectsSidebar />

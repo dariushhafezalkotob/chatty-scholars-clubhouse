@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Star, Award, Book, Compass, GraduationCap, LightBulb } from 'lucide-react';
+import { Star, Award, Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Progress } from '@/components/ui/progress';
 

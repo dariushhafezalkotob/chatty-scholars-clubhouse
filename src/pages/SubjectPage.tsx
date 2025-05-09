@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { useParams } from 'react-router-dom';
-import { Book, Compass, GraduationCap, LightBulb } from 'lucide-react';
+import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
 import ChatInterface from '@/components/chat/ChatInterface';
 import ProgressTracker from '@/components/progress/ProgressTracker';

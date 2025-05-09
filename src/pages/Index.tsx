@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Book, Compass, GraduationCap, LightBulb } from 'lucide-react';
+import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import SubjectCard from '@/components/cards/SubjectCard';
@@ -18,7 +17,7 @@ const subjects = [
   { 
     id: 'science', 
     name: 'Science', 
-    icon: LightBulb, 
+    icon: Lightbulb, 
     color: 'bg-mint-green',
     description: 'Discover how the world works through experiments!'
   },

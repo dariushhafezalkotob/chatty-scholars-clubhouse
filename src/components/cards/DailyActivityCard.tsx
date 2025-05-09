@@ -2,7 +2,7 @@
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { Button } from '@/components/ui/button';
-import { LightBulb } from 'lucide-react';
+import { Lightbulb } from 'lucide-react';
 
 interface DailyActivityCardProps {
   activity: string;
@@ -22,7 +22,7 @@ const DailyActivityCard = ({
     <div className={`bg-white/90 backdrop-blur-sm rounded-xl shadow-md overflow-hidden`}>
       <div className={`${subjectColor} p-2 flex items-center gap-2`}>
         <div className="bg-white/30 p-1.5 rounded-full">
-          <LightBulb className="text-white w-5 h-5" />
+          <Lightbulb className="text-white w-5 h-5" />
         </div>
         <h3 className={`${fontClass} font-bold text-white`}>Today's Smart Plan</h3>
       </div>
