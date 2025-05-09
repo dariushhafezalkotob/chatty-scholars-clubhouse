@@ -43,14 +43,15 @@
     --coral-pink: 10 90% 80%;
     --sunshine-yellow: 50 90% 80%;
     
-    /* Theme-specific colors for different age groups */
-    --young-primary: var(--sky-blue);
-    --young-secondary: var(--mint-green);
-    --young-accent: var(--sunshine-yellow);
+    /* Theme-specific colors for different age groups - Kids */
+    --young-primary: 200 90% 60%;
+    --young-secondary: 150 75% 70%;
+    --young-accent: 50 90% 70%;
     
-    --teen-primary: 220 70% 60%;
-    --teen-secondary: 280 60% 75%;
-    --teen-accent: 320 70% 70%;
+    /* Theme-specific colors for different age groups - Teens */
+    --teen-primary: 220 70% 50%;
+    --teen-secondary: 280 60% 65%;
+    --teen-accent: 320 70% 60%;
 
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
@@ -68,6 +69,7 @@
     --secondary: var(--young-secondary);
     --accent: var(--young-accent);
     font-family: 'Comic Neue', sans-serif;
+    letter-spacing: 0.5px;
   }
   
   /* Teen theme (13-18) */
@@ -82,7 +84,7 @@
     --background: 222.2 84% 4.9%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 222.2 47.4% 11.2%;
     --card-foreground: 210 40% 98%;
 
     --popover: 222.2 84% 4.9%;
@@ -122,11 +124,21 @@
     --mint-green: 150 50% 60%;
     --coral-pink: 10 70% 65%;
     --sunshine-yellow: 50 70% 65%;
+    
+    /* Theme-specific colors for different age groups - Dark Mode Kids */
+    --young-primary: 200 80% 60%;
+    --young-secondary: 150 65% 50%;
+    --young-accent: 50 80% 60%;
+    
+    /* Theme-specific colors for different age groups - Dark Mode Teens */
+    --teen-primary: 220 60% 60%;
+    --teen-secondary: 280 50% 55%;
+    --teen-accent: 320 60% 50%;
   }
   
   /* Dark mode specific gradients */
   .dark .bg-gradient-to-br {
-    background: linear-gradient(135deg, hsl(222.2 84% 6.9%), hsl(217.2 42.6% 12.5%));
+    background: linear-gradient(135deg, hsl(222.2 40% 20%), hsl(217.2 35% 25%));
   }
 }
 
@@ -185,4 +197,24 @@
 /* Dark mode transition */
 body, .bg-white\/80, .bg-black\/60 {
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Improved card backgrounds for dark mode */
+.dark .bg-white\/80 {
+  @apply bg-gray-800/90;
+}
+
+.dark .bg-white\/90 {
+  @apply bg-gray-800/90;
+}
+
+/* Young theme specific styles */
+.young-theme .font-comic {
+  font-size: 1.05em;
+  @apply tracking-wide;
+}
+
+/* Teen theme specific styles */
+.teen-theme button {
+  @apply font-semibold;
 }

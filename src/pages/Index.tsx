@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -5,6 +6,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import SubjectCard from '@/components/cards/SubjectCard';
 import DailyActivityCard from '@/components/cards/DailyActivityCard';
 import ProgressTracker from '@/components/progress/ProgressTracker';
+import { Button } from '@/components/ui/button';
 
 const subjects = [
   { 
@@ -38,7 +40,7 @@ const subjects = [
 ];
 
 const Index = () => {
-  const { ageGroup, setAgeGroup, themeClass } = useTheme();
+  const { ageGroup, setAgeGroup, themeClass, colorMode } = useTheme();
   const navigate = useNavigate();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
@@ -57,12 +59,16 @@ const Index = () => {
           Welcome to Learn Quest!
         </h1>
         
-        <button 
+        <Button 
           onClick={toggleAgeGroup}
-          className="px-4 py-2 text-sm bg-primary/10 rounded-lg"
+          variant={ageGroup === 'young' ? 'outline' : 'default'}
+          className={`
+            px-4 py-2 text-sm 
+            ${ageGroup === 'young' ? 'rounded-xl font-comic' : 'rounded-md font-nunito font-semibold'}
+          `}
         >
           Switch to {ageGroup === 'young' ? 'Teen' : 'Kids'} Mode
-        </button>
+        </Button>
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

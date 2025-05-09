@@ -9,12 +9,19 @@ import { Moon, Sun } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const AppLayout = () => {
-  const { themeClass, colorMode, toggleColorMode } = useTheme();
+  const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
 
+  // Different gradient background based on theme
+  const gradientBg = colorMode === 'dark'
+    ? 'bg-gradient-to-br from-background to-secondary/30'
+    : `bg-gradient-to-br ${ageGroup === 'young' 
+        ? 'from-sky-blue/20 to-mint-green/20' 
+        : 'from-primary/10 to-secondary/20'}`;
+    
   return (
-    <div className={`min-h-screen bg-gradient-to-br from-background to-secondary/30 ${themeClass}`}>
+    <div className={`min-h-screen ${gradientBg} ${themeClass}`}>
       <SidebarProvider
         defaultOpen={!isMobile}
         open={sidebarOpen}

@@ -58,7 +58,12 @@ const SubjectPage = () => {
       </div>
       
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className={`md:col-span-2 ${colorMode === 'dark' ? 'bg-black/60' : 'bg-white/80'} backdrop-blur-sm p-6 rounded-xl shadow-md`}>
+        <div className={`
+          md:col-span-2 
+          ${colorMode === 'dark' ? 'bg-gray-800/80' : 'bg-white/80'} 
+          backdrop-blur-sm p-6 rounded-xl shadow-md border
+          ${colorMode === 'dark' ? 'border-gray-700' : 'border-gray-100'}
+        `}>
           <ChatInterface 
             subject={subject.name} 
             characterType={subject.character as 'owl' | 'robot' | 'book'} 

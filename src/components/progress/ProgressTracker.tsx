@@ -11,21 +11,29 @@ interface ProgressTrackerProps {
 }
 
 const ProgressTracker = ({ progress, stars, subject }: ProgressTrackerProps) => {
-  const { ageGroup } = useTheme();
+  const { ageGroup, colorMode } = useTheme();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
+  const progressColors = ageGroup === 'young'
+    ? 'bg-sky-blue' 
+    : 'bg-primary';
+  
   return (
-    <div className="bg-white/80 backdrop-blur-sm p-4 rounded-xl shadow-md">
+    <div className={`
+      ${colorMode === 'dark' ? 'bg-gray-800/80' : 'bg-white/80'} 
+      backdrop-blur-sm p-4 rounded-xl shadow-md border
+      ${colorMode === 'dark' ? 'border-gray-700' : 'border-gray-100'}
+    `}>
       <h3 className={`${fontClass} font-bold text-lg mb-2`}>
         {subject ? `${subject} Progress` : 'Your Progress'}
       </h3>
       
       <div className="mb-4">
         <div className="flex justify-between mb-1">
-          <span className={`${fontClass} text-sm`}>Level Progress</span>
+          <span className={`${fontClass} text-sm ${colorMode === 'dark' ? 'text-gray-300' : ''}`}>Level Progress</span>
           <span className={`${fontClass} text-sm font-bold`}>{progress}%</span>
         </div>
-        <Progress value={progress} className="h-3 rounded-full" />
+        <Progress value={progress} className={`h-3 rounded-full ${progressColors}`} />
       </div>
       
       <div className="flex items-center gap-1">

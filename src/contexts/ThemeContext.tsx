@@ -25,6 +25,18 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (prefersDark) {
       setColorMode('dark');
     }
+    
+    // Set up a listener for changes in system color scheme preference
+    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const handleChange = (e: MediaQueryListEvent) => {
+      setColorMode(e.matches ? 'dark' : 'light');
+    };
+    
+    mediaQuery.addEventListener('change', handleChange);
+    
+    return () => {
+      mediaQuery.removeEventListener('change', handleChange);
+    };
   }, []);
   
   // Apply the color mode to the document
@@ -35,6 +47,25 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       document.documentElement.classList.remove('dark');
     }
   }, [colorMode]);
+  
+  // Save preferences to localStorage
+  useEffect(() => {
+    localStorage.setItem('learnquest-theme', JSON.stringify({ ageGroup, colorMode }));
+  }, [ageGroup, colorMode]);
+  
+  // Load preferences from localStorage on initial load
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('learnquest-theme');
+    if (savedTheme) {
+      try {
+        const { ageGroup: savedAgeGroup, colorMode: savedColorMode } = JSON.parse(savedTheme);
+        if (savedAgeGroup) setAgeGroup(savedAgeGroup);
+        if (savedColorMode) setColorMode(savedColorMode);
+      } catch (error) {
+        console.error("Error parsing saved theme preferences:", error);
+      }
+    }
+  }, []);
   
   const toggleColorMode = () => {
     setColorMode(prev => prev === 'light' ? 'dark' : 'light');
