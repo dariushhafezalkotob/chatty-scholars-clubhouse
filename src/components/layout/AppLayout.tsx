@@ -36,7 +36,7 @@ const AppLayout = () => {
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
       >
-        <div className="flex min-h-screen w-full">
+        <div className="flex min-h-screen w-full flex-row-reverse rtl:flex-row">
           <SubjectsSidebar />
           
           <main className="flex-1 p-4">

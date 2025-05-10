@@ -3,6 +3,7 @@ import React from 'react';
 import { NavLink } from 'react-router-dom';
 import { Book, Compass, GraduationCap, Lightbulb, Star, MessageCircle } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import {
   Sidebar,
   SidebarContent,
@@ -17,14 +18,15 @@ import {
 } from '@/components/ui/sidebar';
 
 const subjects = [
-  { id: 'math', name: 'Mathematics', icon: Compass, color: 'bg-sky-blue' },
-  { id: 'science', name: 'Science', icon: Lightbulb, color: 'bg-mint-green' },
-  { id: 'english', name: 'Language', icon: Book, color: 'bg-coral-pink' },
-  { id: 'history', name: 'History', icon: GraduationCap, color: 'bg-sunshine-yellow' },
+  { id: 'math', name: 'Mathematics', translationKey: 'mathematics', icon: Compass, color: 'bg-sky-blue' },
+  { id: 'science', name: 'Science', translationKey: 'science', icon: Lightbulb, color: 'bg-mint-green' },
+  { id: 'english', name: 'Language', translationKey: 'language', icon: Book, color: 'bg-coral-pink' },
+  { id: 'history', name: 'History', translationKey: 'history', icon: GraduationCap, color: 'bg-sunshine-yellow' },
 ];
 
 const SubjectsSidebar = () => {
   const { ageGroup } = useTheme();
+  const { translations } = useLanguage();
   const { state } = useSidebar();
   const collapsed = state === "collapsed";
 
@@ -43,7 +45,7 @@ const SubjectsSidebar = () => {
       <div className="flex justify-between items-center p-4">
         {!collapsed && (
           <h1 className={`font-bold text-lg ${ageGroup === 'young' ? 'font-comic' : 'font-nunito'}`}>
-            Learn Quest
+            {translations['app.name'] || 'Learn Quest'}
           </h1>
         )}
         <SidebarTrigger className="p-2 bg-primary/10 rounded-full" />
@@ -52,7 +54,7 @@ const SubjectsSidebar = () => {
       <SidebarContent className="p-2">
         <SidebarGroup>
           <SidebarGroupLabel className={`${ageGroup === 'young' ? 'text-base font-comic' : 'text-sm font-nunito'}`}>
-            Subjects
+            {translations['subject'] || 'Subjects'}
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -69,7 +71,7 @@ const SubjectsSidebar = () => {
                       </div>
                       {!collapsed && (
                         <span className={ageGroup === 'young' ? 'font-comic' : 'font-nunito'}>
-                          {subject.name}
+                          {translations[`subject.${subject.translationKey}`] || subject.name}
                         </span>
                       )}
                     </NavLink>
@@ -82,7 +84,7 @@ const SubjectsSidebar = () => {
 
         <SidebarGroup>
           <SidebarGroupLabel className={`${ageGroup === 'young' ? 'text-base font-comic' : 'text-sm font-nunito'}`}>
-            Dashboard
+            {translations['dashboard'] || 'Dashboard'}
           </SidebarGroupLabel>
 
           <SidebarGroupContent>
@@ -94,7 +96,9 @@ const SubjectsSidebar = () => {
                       <MessageCircle size={iconSize} />
                     </div>
                     {!collapsed && (
-                      <span className={ageGroup === 'young' ? 'font-comic' : 'font-nunito'}>Chat</span>
+                      <span className={ageGroup === 'young' ? 'font-comic' : 'font-nunito'}>
+                        {translations['chat.title'] || 'Chat'}
+                      </span>
                     )}
                   </NavLink>
                 </SidebarMenuButton>
@@ -107,7 +111,9 @@ const SubjectsSidebar = () => {
                       <Star size={iconSize} />
                     </div>
                     {!collapsed && (
-                      <span className={ageGroup === 'young' ? 'font-comic' : 'font-nunito'}>My Progress</span>
+                      <span className={ageGroup === 'young' ? 'font-comic' : 'font-nunito'}>
+                        {translations['progress.title'] || 'My Progress'}
+                      </span>
                     )}
                   </NavLink>
                 </SidebarMenuButton>

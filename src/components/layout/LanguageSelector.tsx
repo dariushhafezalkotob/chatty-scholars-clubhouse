@@ -24,7 +24,7 @@ const LanguageSelector = () => {
           <span className="sr-only">Select language</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end">
+      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border z-50">
         {languageList.map((lang) => (
           <DropdownMenuItem
             key={lang.code}

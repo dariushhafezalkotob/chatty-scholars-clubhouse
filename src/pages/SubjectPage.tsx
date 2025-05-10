@@ -50,7 +50,7 @@ const subjects = {
 const SubjectPage = () => {
   const { subjectId = 'math' } = useParams();
   const { ageGroup, colorMode } = useTheme();
-  const { translations } = useLanguage();
+  const { translations, direction } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
   const subject = subjects[subjectId as keyof typeof subjects] || subjects.math;
@@ -70,7 +70,7 @@ const SubjectPage = () => {
     subject.activity;
   
   return (
-    <div className="container mx-auto py-6">
+    <div className="container mx-auto py-6" dir={direction}>
       <div className="mb-6">
         <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
           {subjectName}

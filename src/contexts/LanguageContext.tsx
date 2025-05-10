@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
 export type Language = 'en' | 'fa' | 'fr' | 'de' | 'es' | 'ar';
@@ -42,11 +42,14 @@ const LanguageContext = createContext<LanguageContextType | undefined>(undefined
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   const [language, setLanguageState] = useState<Language>('en');
   const [translations, setTranslations] = useState<Record<string, string>>({});
+  const [direction, setDirection] = useState<Direction>('ltr');
 
   // Set language and load translations
   const setLanguage = async (newLanguage: Language) => {
-    const direction = languageDirections[newLanguage];
-    document.documentElement.dir = direction;
+    const newDirection = languageDirections[newLanguage];
+    setDirection(newDirection);
+    
+    document.documentElement.dir = newDirection;
     document.documentElement.lang = newLanguage;
     
     // Load translations dynamically
@@ -62,15 +65,15 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   // Initialize translations on mount
-  React.useEffect(() => {
-    setLanguage(language);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setLanguage('en');
+  }, []); 
 
   return (
     <LanguageContext.Provider
       value={{
         language,
-        direction: languageDirections[language],
+        direction,
         setLanguage,
         translations
       }}
