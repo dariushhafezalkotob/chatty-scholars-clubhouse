@@ -186,6 +186,20 @@
   .micro-pop:active {
     transform: scale(0.95);
   }
+  
+  /* Float animation for kid mode */
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  @keyframes float {
+    0%, 100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 }
 
 /* Dark mode specific animations */

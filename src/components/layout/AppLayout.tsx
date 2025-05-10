@@ -1,27 +1,33 @@
 
 import React, { useState } from 'react';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import SubjectsSidebar from './SubjectsSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Moon, Sun } from 'lucide-react';
+import { Moon, Sun, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 
 const AppLayout = () => {
   const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
-
-  // Different gradient background based on theme
-  const gradientBg = colorMode === 'dark'
-    ? 'bg-gradient-to-br from-background to-secondary/30'
-    : `bg-gradient-to-br ${ageGroup === 'young' 
-        ? 'from-sky-blue/20 to-mint-green/20' 
-        : 'from-primary/10 to-secondary/20'}`;
+  const navigate = useNavigate();
+  
+  // Enhanced gradient background based on theme
+  const getGradientBg = () => {
+    if (colorMode === 'dark') {
+      return 'bg-gradient-to-br from-background to-secondary/30';
+    } else if (ageGroup === 'young') {
+      // More vibrant gradient for kids mode
+      return 'bg-gradient-to-br from-sky-blue/40 to-mint-green/30 via-sunshine-yellow/20';
+    } else {
+      return 'bg-gradient-to-br from-primary/10 to-secondary/20';
+    }
+  };
     
   return (
-    <div className={`min-h-screen ${gradientBg} ${themeClass}`}>
+    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
       <SidebarProvider
         defaultOpen={!isMobile}
         open={sidebarOpen}
@@ -31,7 +37,17 @@ const AppLayout = () => {
           <SubjectsSidebar />
           
           <main className="flex-1 p-4">
-            <div className="flex justify-end mb-2">
+            <div className="flex justify-between mb-2">
+              <Button 
+                variant="ghost" 
+                size="icon" 
+                onClick={() => navigate('/')}
+                aria-label="Go to dashboard"
+                className={`rounded-full ${ageGroup === 'young' ? 'animate-float' : ''}`}
+              >
+                <Home className="h-5 w-5" />
+              </Button>
+              
               <Button 
                 variant="ghost" 
                 size="icon" 

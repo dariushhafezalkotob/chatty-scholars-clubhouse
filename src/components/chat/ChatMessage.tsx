@@ -2,6 +2,9 @@
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import TutorCharacter from '@/components/characters/TutorCharacter';
+import { Home } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { useNavigate } from 'react-router-dom';
 
 export type MessageType = 'user' | 'assistant';
 
@@ -13,14 +16,44 @@ interface ChatMessageProps {
 
 const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps) => {
   const { ageGroup, colorMode } = useTheme();
+  const navigate = useNavigate();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
+  
+  // More vibrant colors for kid mode
+  const getUserBubbleColor = () => {
+    if (ageGroup === 'young') {
+      return colorMode === 'dark' 
+        ? 'bg-gradient-to-br from-sky-blue/50 to-mint-green/40 text-gray-100' 
+        : 'bg-gradient-to-br from-sky-blue to-mint-green/70 text-gray-800';
+    } else {
+      return colorMode === 'dark' 
+        ? 'bg-primary/30 text-gray-200' 
+        : 'bg-primary/20 text-gray-800';
+    }
+  };
+  
+  const getAssistantBubbleColor = () => {
+    if (ageGroup === 'young') {
+      return colorMode === 'dark' 
+        ? 'bg-gradient-to-br from-coral-pink/40 to-sunshine-yellow/30 text-gray-100' 
+        : 'bg-gradient-to-br from-coral-pink/80 to-sunshine-yellow/60 text-gray-800';
+    } else {
+      return colorMode === 'dark' 
+        ? 'bg-gray-700 text-gray-100' 
+        : 'bg-white text-gray-800';
+    }
+  };
+  
+  const handleGoHome = () => {
+    navigate('/');
+  };
   
   if (type === 'user') {
     return (
       <div className="flex justify-end mb-4">
         <div className={`
           ${fontClass} max-w-[80%] rounded-2xl rounded-tr-sm 
-          ${colorMode === 'dark' ? 'bg-primary/30 text-gray-200' : 'bg-primary/20 text-gray-800'}
+          ${getUserBubbleColor()}
           px-4 py-2
         `}>
           {content}
@@ -34,7 +67,7 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
       <TutorCharacter type={characterType} size="sm" />
       <div className={`
         ${fontClass} max-w-[80%] rounded-2xl rounded-tl-sm 
-        ${colorMode === 'dark' ? 'bg-gray-700 text-gray-100' : 'bg-white text-gray-800'} 
+        ${getAssistantBubbleColor()}
         px-4 py-2 shadow-sm
       `}>
         {content}
