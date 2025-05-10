@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
@@ -46,10 +45,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
 
   // Set language and load translations
   const setLanguage = async (newLanguage: Language) => {
+    // Keep track of the language's natural direction, but don't change document direction
     const newDirection = languageDirections[newLanguage];
     setDirection(newDirection);
     
-    document.documentElement.dir = newDirection;
+    // Don't change document direction
+    // document.documentElement.dir = newDirection;
     document.documentElement.lang = newLanguage;
     
     // Load translations dynamically

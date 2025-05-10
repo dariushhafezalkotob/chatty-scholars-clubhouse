@@ -12,7 +12,7 @@ import LanguageSelector from './LanguageSelector';
 
 const AppLayout = () => {
   const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
-  const { direction } = useLanguage();
+  const { translations } = useLanguage();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const navigate = useNavigate();
@@ -30,13 +30,13 @@ const AppLayout = () => {
   };
     
   return (
-    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`} dir={direction}>
+    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
       <SidebarProvider
         defaultOpen={!isMobile}
         open={sidebarOpen}
         onOpenChange={setSidebarOpen}
       >
-        <div className="flex min-h-screen w-full flex-row-reverse rtl:flex-row">
+        <div className="flex min-h-screen w-full flex-row">
           <SubjectsSidebar />
           
           <main className="flex-1 p-4">

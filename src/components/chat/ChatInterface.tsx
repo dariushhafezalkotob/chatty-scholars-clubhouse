@@ -26,7 +26,7 @@ const ChatInterface = ({
   initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?"
 }: ChatInterfaceProps) => {
   const { ageGroup } = useTheme();
-  const { translations, direction } = useLanguage();
+  const { translations } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -95,7 +95,7 @@ const ChatInterface = ({
     `${subject} Tutor`;
   
   return (
-    <div className="flex flex-col h-full" dir={direction}>
+    <div className="flex flex-col h-full">
       {/* Character and welcome */}
       <div className="flex flex-col items-center mb-6">
         <TutorCharacter type={characterType} size="lg" />
