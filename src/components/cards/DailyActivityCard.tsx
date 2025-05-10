@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Lightbulb } from 'lucide-react';
 
@@ -8,15 +9,28 @@ interface DailyActivityCardProps {
   activity: string;
   subjectColor?: string;
   onStart?: () => void;
+  translationKey?: string;
 }
 
 const DailyActivityCard = ({ 
   activity, 
   subjectColor = 'bg-mint-green',
-  onStart 
+  onStart,
+  translationKey
 }: DailyActivityCardProps) => {
   const { ageGroup, colorMode } = useTheme();
+  const { translations } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
+  
+  // Get translated activity if translation key is available
+  const displayActivity = translationKey ? 
+    translations[`activity.${translationKey}`] || activity : activity;
+  
+  // Get translated title
+  const titleText = translations['activity.title'] || "Today's Smart Plan";
+  
+  // Get translated button text
+  const buttonText = translations['button.lets.start'] || "Let's Start!";
   
   return (
     <div className={`
@@ -28,11 +42,13 @@ const DailyActivityCard = ({
         <div className="bg-white/30 p-1.5 rounded-full">
           <Lightbulb className="text-white w-5 h-5" />
         </div>
-        <h3 className={`${fontClass} font-bold text-white`}>Today's Smart Plan</h3>
+        <h3 className={`${fontClass} font-bold text-white`}>{titleText}</h3>
       </div>
       
       <div className="p-4">
-        <p className={`${fontClass} text-lg mb-4 ${colorMode === 'dark' ? 'text-gray-200' : ''}`}>{activity}</p>
+        <p className={`${fontClass} text-lg mb-4 ${colorMode === 'dark' ? 'text-gray-200' : ''}`}>
+          {displayActivity}
+        </p>
         
         <Button 
           onClick={onStart} 
@@ -42,7 +58,7 @@ const DailyActivityCard = ({
           `}
           variant={ageGroup === 'young' ? 'default' : 'outline'}
         >
-          Let's Start!
+          {buttonText}
         </Button>
       </div>
     </div>

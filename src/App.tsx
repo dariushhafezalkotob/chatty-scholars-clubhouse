@@ -5,6 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ThemeProvider } from "@/contexts/ThemeContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import AppLayout from "@/components/layout/AppLayout";
 import Index from "@/pages/Index";
 import SubjectPage from "@/pages/SubjectPage";
@@ -18,19 +19,21 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <ThemeProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route element={<AppLayout />}>
-              <Route path="/" element={<Index />} />
-              <Route path="/subject/:subjectId" element={<SubjectPage />} />
-              <Route path="/chat" element={<ChatPage />} />
-              <Route path="/progress" element={<ProgressPage />} />
-            </Route>
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
+        <LanguageProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route element={<AppLayout />}>
+                <Route path="/" element={<Index />} />
+                <Route path="/subject/:subjectId" element={<SubjectPage />} />
+                <Route path="/chat" element={<ChatPage />} />
+                <Route path="/progress" element={<ProgressPage />} />
+              </Route>
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </BrowserRouter>
+        </LanguageProvider>
       </ThemeProvider>
     </TooltipProvider>
   </QueryClientProvider>

@@ -2,6 +2,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ChatMessage, { MessageType } from './ChatMessage';
@@ -25,6 +26,7 @@ const ChatInterface = ({
   initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?"
 }: ChatInterfaceProps) => {
   const { ageGroup } = useTheme();
+  const { translations } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -70,11 +72,11 @@ const ChatInterface = ({
   const getAssistantResponse = (userInput: string, subject?: string): string => {
     // This is a simple placeholder - in a real app, this would be an API call
     if (userInput.toLowerCase().includes('hello') || userInput.toLowerCase().includes('hi')) {
-      return "Hello! How can I help you learn today?";
+      return translations['chat.welcome.general'] || "Hello! How can I help you learn today?";
     } 
     
     if (subject === 'math') {
-      return "That's a great math question! Let's solve it step by step...";
+      return translations['chat.welcome.math'] || "That's a great math question! Let's solve it step by step...";
     }
     
     if (userInput.toLowerCase().includes('help')) {
@@ -84,6 +86,14 @@ const ChatInterface = ({
     return "That's interesting! Would you like to learn more about this topic?";
   };
   
+  // Get translated placeholder
+  const placeholderText = translations['chat.placeholder'] || "Type your message...";
+  
+  // Get translated tutor title
+  const tutorTitle = subject && translations[`subject.${subject.toLowerCase()}`] ? 
+    `${translations[`subject.${subject.toLowerCase()}`]} ${translations['chat.title'] || 'Tutor'}` : 
+    `${subject} Tutor`;
+  
   return (
     <div className="flex flex-col h-full">
       {/* Character and welcome */}
@@ -91,7 +101,7 @@ const ChatInterface = ({
         <TutorCharacter type={characterType} size="lg" />
         {subject && (
           <h2 className={`${fontClass} font-bold text-lg mt-2 text-center`}>
-            {subject} Tutor
+            {tutorTitle}
           </h2>
         )}
       </div>
@@ -114,7 +124,7 @@ const ChatInterface = ({
         <Input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message..."
+          placeholder={placeholderText}
           className={`flex-1 ${fontClass} text-base py-6 rounded-xl`}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
         />

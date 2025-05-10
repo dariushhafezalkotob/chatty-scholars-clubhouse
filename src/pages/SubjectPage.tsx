@@ -3,6 +3,7 @@ import React from 'react';
 import { useParams } from 'react-router-dom';
 import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import ChatInterface from '@/components/chat/ChatInterface';
 import ProgressTracker from '@/components/progress/ProgressTracker';
 import DailyActivityCard from '@/components/cards/DailyActivityCard';
@@ -14,7 +15,8 @@ const subjects = {
     color: 'bg-sky-blue',
     character: 'robot',
     welcomeMessage: "Hi there! I'm your Math tutor. Ready to solve some fun problems together?",
-    activity: "Let's practice multiplication tables today! Can you master the 7's?"
+    activity: "Let's practice multiplication tables today! Can you master the 7's?",
+    translationKey: 'mathematics'
   },
   science: { 
     name: 'Science', 
@@ -22,7 +24,8 @@ const subjects = {
     color: 'bg-mint-green',
     character: 'owl',
     welcomeMessage: "Hello curious mind! I'm your Science guide. What shall we discover today?",
-    activity: "Let's explore how plants grow from seeds to full plants!"
+    activity: "Let's explore how plants grow from seeds to full plants!",
+    translationKey: 'science'
   },
   english: { 
     name: 'Language', 
@@ -30,7 +33,8 @@ const subjects = {
     color: 'bg-coral-pink',
     character: 'book',
     welcomeMessage: "Hi there, word explorer! Ready to read, write, and have fun with language?",
-    activity: "Let's learn five new words and use them in a short story!"
+    activity: "Let's learn five new words and use them in a short story!",
+    translationKey: 'language'
   },
   history: { 
     name: 'History', 
@@ -38,22 +42,38 @@ const subjects = {
     color: 'bg-sunshine-yellow',
     character: 'owl',
     welcomeMessage: "Greetings time traveler! Ready to journey through history together?",
-    activity: "Let's learn about Ancient Egypt and discover the secrets of the pyramids!"
+    activity: "Let's learn about Ancient Egypt and discover the secrets of the pyramids!",
+    translationKey: 'history'
   },
 };
 
 const SubjectPage = () => {
   const { subjectId = 'math' } = useParams();
   const { ageGroup, colorMode } = useTheme();
+  const { translations } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
   const subject = subjects[subjectId as keyof typeof subjects] || subjects.math;
+  
+  // Get translated subject name
+  const subjectName = subject.translationKey ?
+    translations[`subject.${subject.translationKey}`] || subject.name : subject.name;
+  
+  // Get translated welcome message
+  const welcomeMessage = subject.translationKey ?
+    translations[`chat.welcome.${subject.translationKey.toLowerCase()}`] || subject.welcomeMessage : 
+    subject.welcomeMessage;
+  
+  // Get translated activity
+  const activity = subject.translationKey ?
+    translations[`activity.${subject.translationKey.toLowerCase()}`] || subject.activity : 
+    subject.activity;
   
   return (
     <div className="container mx-auto py-6">
       <div className="mb-6">
         <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
-          {subject.name}
+          {subjectName}
         </h1>
       </div>
       
@@ -65,22 +85,23 @@ const SubjectPage = () => {
           ${colorMode === 'dark' ? 'border-gray-700' : 'border-gray-100'}
         `}>
           <ChatInterface 
-            subject={subject.name} 
+            subject={subjectName} 
             characterType={subject.character as 'owl' | 'robot' | 'book'} 
-            initialMessage={subject.welcomeMessage}
+            initialMessage={welcomeMessage}
           />
         </div>
         
         <div className="space-y-6">
           <DailyActivityCard
-            activity={subject.activity}
+            activity={activity}
             subjectColor={subject.color}
+            translationKey={subject.translationKey?.toLowerCase()}
           />
           
           <ProgressTracker 
             progress={65} 
             stars={3} 
-            subject={subject.name} 
+            subject={subjectName} 
           />
         </div>
       </div>

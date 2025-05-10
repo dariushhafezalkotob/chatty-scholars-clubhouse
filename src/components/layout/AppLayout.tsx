@@ -2,14 +2,17 @@
 import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
+import { useLanguage } from '@/contexts/LanguageContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import SubjectsSidebar from './SubjectsSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Moon, Sun, Home } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import LanguageSelector from './LanguageSelector';
 
 const AppLayout = () => {
   const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
+  const { direction } = useLanguage();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ const AppLayout = () => {
   };
     
   return (
-    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
+    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`} dir={direction}>
       <SidebarProvider
         defaultOpen={!isMobile}
         open={sidebarOpen}
@@ -48,15 +51,18 @@ const AppLayout = () => {
                 <Home className="h-5 w-5" />
               </Button>
               
-              <Button 
-                variant="ghost" 
-                size="icon" 
-                onClick={toggleColorMode}
-                aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-                className="rounded-full"
-              >
-                {colorMode === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
-              </Button>
+              <div className="flex items-center gap-2">
+                <LanguageSelector />
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  onClick={toggleColorMode}
+                  aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
+                  className="rounded-full"
+                >
+                  {colorMode === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                </Button>
+              </div>
             </div>
             <Outlet />
           </main>

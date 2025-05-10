@@ -1,0 +1,98 @@
+
+import React, { createContext, useContext, useState, ReactNode } from 'react';
+
+// Define available languages
+export type Language = 'en' | 'fa' | 'fr' | 'de' | 'es' | 'ar';
+
+// Define language direction
+export type Direction = 'ltr' | 'rtl';
+
+type LanguageContextType = {
+  language: Language;
+  direction: Direction;
+  setLanguage: (language: Language) => void;
+  translations: Record<string, string>;
+};
+
+const languageDirections: Record<Language, Direction> = {
+  en: 'ltr',
+  fa: 'rtl',
+  fr: 'ltr',
+  de: 'ltr',
+  es: 'ltr',
+  ar: 'rtl'
+};
+
+const languages = {
+  en: { name: 'English', nativeName: 'English' },
+  fa: { name: 'Farsi', nativeName: 'فارسی' },
+  fr: { name: 'French', nativeName: 'Français' },
+  de: { name: 'German', nativeName: 'Deutsch' },
+  es: { name: 'Spanish', nativeName: 'Español' },
+  ar: { name: 'Arabic', nativeName: 'العربية' },
+};
+
+export const languageList = Object.entries(languages).map(([code, names]) => ({
+  code: code as Language,
+  ...names
+}));
+
+const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
+
+export const LanguageProvider = ({ children }: { children: ReactNode }) => {
+  const [language, setLanguageState] = useState<Language>('en');
+  const [translations, setTranslations] = useState<Record<string, string>>({});
+
+  // Set language and load translations
+  const setLanguage = async (newLanguage: Language) => {
+    const direction = languageDirections[newLanguage];
+    document.documentElement.dir = direction;
+    document.documentElement.lang = newLanguage;
+    
+    // Load translations dynamically
+    try {
+      const translationsModule = await import(`../translations/${newLanguage}.ts`);
+      setTranslations(translationsModule.default);
+    } catch (error) {
+      console.error(`Failed to load translations for ${newLanguage}`, error);
+      setTranslations({});
+    }
+    
+    setLanguageState(newLanguage);
+  };
+
+  // Initialize translations on mount
+  React.useEffect(() => {
+    setLanguage(language);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  return (
+    <LanguageContext.Provider
+      value={{
+        language,
+        direction: languageDirections[language],
+        setLanguage,
+        translations
+      }}
+    >
+      {children}
+    </LanguageContext.Provider>
+  );
+};
+
+export const useLanguage = () => {
+  const context = useContext(LanguageContext);
+  if (context === undefined) {
+    throw new Error('useLanguage must be used within a LanguageProvider');
+  }
+  return context;
+};
+
+// Helper function to get a translation
+export const t = (key: string, context?: LanguageContextType) => {
+  if (!context) {
+    // When used outside of a component (like in a utility function)
+    return key;
+  }
+  return context.translations[key] || key;
+};
