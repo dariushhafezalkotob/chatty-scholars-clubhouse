@@ -99,7 +99,7 @@ const ChatInterface = ({
     : `${subject} Tutor`;
 
   return (
-    <div className="flex flex-col h-full max-h-[80vh]">
+    <div className="flex flex-col h-full max-h-[50vh]">
       {/* Character and welcome */}
       <div className="flex flex-col items-center mb-4">
         <TutorCharacter type={characterType} size="lg" />
