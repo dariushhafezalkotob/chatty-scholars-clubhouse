@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -21,8 +20,8 @@ interface ChatInterfaceProps {
   initialMessage?: string;
 }
 
-const ChatInterface = ({ 
-  subject, 
+const ChatInterface = ({
+  subject,
   characterType = 'owl',
   initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?"
 }: ChatInterfaceProps) => {
@@ -37,33 +36,39 @@ const ChatInterface = ({
       content: initialMessage,
     },
   ]);
-  
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const scrollAreaRef = useRef<HTMLDivElement>(null);
-  
+  const messagesEndRef = useRef<HTMLDivElement>(null);
+
   const scrollToBottom = () => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    if (scrollAreaRef.current) {
+      const scrollContainer = scrollAreaRef.current.querySelector('[data-radix-scroll-area-viewport]');
+      if (scrollContainer) {
+        scrollContainer.scrollTo({
+          top: scrollContainer.scrollHeight,
+          behavior: 'smooth',
+        });
+      }
     }
   };
-  
+
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-  
+
   const handleSend = () => {
     if (!input.trim()) return;
-    
+
     // Add user message
     const userMessage: Message = {
       id: Date.now().toString(),
       type: 'user',
       content: input,
     };
-    
+
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
-    
+
     // Simulate assistant response after a short delay
     setTimeout(() => {
       const assistantMessage: Message = {
@@ -74,36 +79,29 @@ const ChatInterface = ({
       setMessages((prev) => [...prev, assistantMessage]);
     }, 1000);
   };
-  
+
   const getAssistantResponse = (userInput: string, subject?: string): string => {
-    // This is a simple placeholder - in a real app, this would be an API call
     if (userInput.toLowerCase().includes('hello') || userInput.toLowerCase().includes('hi')) {
       return translations['chat.welcome.general'] || "Hello! How can I help you learn today?";
-    } 
-    
+    }
     if (subject === 'math') {
       return translations['chat.welcome.math'] || "That's a great math question! Let's solve it step by step...";
     }
-    
     if (userInput.toLowerCase().includes('help')) {
       return "I'm here to help! What would you like to know?";
     }
-    
     return "That's interesting! Would you like to learn more about this topic?";
   };
-  
-  // Get translated placeholder
+
   const placeholderText = translations['chat.placeholder'] || "Type your message...";
-  
-  // Get translated tutor title
-  const tutorTitle = subject && translations[`subject.${subject.toLowerCase()}`] ? 
-    `${translations[`subject.${subject.toLowerCase()}`]} ${translations['chat.title'] || 'Tutor'}` : 
-    `${subject} Tutor`;
-  
+  const tutorTitle = subject && translations[`subject.${subject.toLowerCase()}`]
+    ? `${translations[`subject.${subject.toLowerCase()}`]} ${translations['chat.title'] || 'Tutor'}`
+    : `${subject} Tutor`;
+
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex flex-col h-full max-h-[80vh]">
       {/* Character and welcome */}
-      <div className="flex flex-col items-center mb-6">
+      <div className="flex flex-col items-center mb-4">
         <TutorCharacter type={characterType} size="lg" />
         {subject && (
           <h2 className={`${fontClass} font-bold text-lg mt-2 text-center`}>
@@ -111,26 +109,25 @@ const ChatInterface = ({
           </h2>
         )}
       </div>
-      
+
       {/* Messages container with fixed height and scrollable */}
-      <ScrollArea 
-        className="flex-1 mb-4 p-4 bg-secondary/20 rounded-xl"
-        style={{ height: '400px' }}
+      <ScrollArea
         ref={scrollAreaRef}
+        className="flex-1 mb-4 p-4 bg-secondary/20 rounded-xl overflow-hidden"
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
           {messages.map((message) => (
-            <ChatMessage 
-              key={message.id} 
-              type={message.type} 
-              content={message.content} 
+            <ChatMessage
+              key={message.id}
+              type={message.type}
+              content={message.content}
               characterType={characterType}
             />
           ))}
           <div ref={messagesEndRef} />
         </div>
       </ScrollArea>
-      
+
       {/* Input area */}
       <div className="flex gap-2">
         <Input
