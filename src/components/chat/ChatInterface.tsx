@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import ChatMessage, { MessageType } from './ChatMessage';
 import TutorCharacter from '@/components/characters/TutorCharacter';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 interface Message {
   id: string;
@@ -38,12 +39,17 @@ const ChatInterface = ({
   ]);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
   
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
   };
   
-  useEffect(scrollToBottom, [messages]);
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
   
   const handleSend = () => {
     if (!input.trim()) return;
@@ -106,18 +112,24 @@ const ChatInterface = ({
         )}
       </div>
       
-      {/* Messages container */}
-      <div className="flex-1 overflow-y-auto mb-4 p-4 bg-secondary/20 rounded-xl">
-        {messages.map((message) => (
-          <ChatMessage 
-            key={message.id} 
-            type={message.type} 
-            content={message.content} 
-            characterType={characterType}
-          />
-        ))}
-        <div ref={messagesEndRef} />
-      </div>
+      {/* Messages container with fixed height and scrollable */}
+      <ScrollArea 
+        className="flex-1 mb-4 p-4 bg-secondary/20 rounded-xl"
+        style={{ height: '400px' }}
+        ref={scrollAreaRef}
+      >
+        <div className="flex flex-col">
+          {messages.map((message) => (
+            <ChatMessage 
+              key={message.id} 
+              type={message.type} 
+              content={message.content} 
+              characterType={characterType}
+            />
+          ))}
+          <div ref={messagesEndRef} />
+        </div>
+      </ScrollArea>
       
       {/* Input area */}
       <div className="flex gap-2">

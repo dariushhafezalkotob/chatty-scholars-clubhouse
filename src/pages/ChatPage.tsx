@@ -24,7 +24,7 @@ const ChatPage = () => {
         </h1>
       </div>
       
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-md min-h-[600px]">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-md h-[600px] flex flex-col">
         <ChatInterface 
           initialMessage={welcomeMessage}
         />
