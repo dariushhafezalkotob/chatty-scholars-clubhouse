@@ -23,6 +23,7 @@ interface ChatInterfaceProps {
   initialMessage?: string;
   useExternalLLM?: boolean; // New prop to toggle external LLM usage
   apiEndpoint?: string; // New prop for API endpoint
+  systemRole?: string; // New prop for system role
 }
 
 const ChatInterface = ({
@@ -31,6 +32,7 @@ const ChatInterface = ({
   initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?",
   useExternalLLM = false,
   apiEndpoint = 'http://localhost:8000/chat', // Default endpoint
+  systemRole, // Default is undefined
 }: ChatInterfaceProps) => {
   const { ageGroup } = useTheme();
   const { translations } = useLanguage();
@@ -76,10 +78,16 @@ const ChatInterface = ({
         content: msg.content
       }));
       
-      // Add a system message for the specific subject if available
-      const systemMessage = subject 
-        ? { role: 'system', content: `You are a helpful and knowledgeable ${subject} tutor.` }
-        : { role: 'system', content: 'You are a helpful and friendly tutor.' };
+      // Create a system message based on either the provided systemRole or the subject
+      const defaultSystemContent = subject 
+        ? `You are a helpful and knowledgeable ${subject} tutor.`
+        : 'You are a helpful and friendly tutor.';
+      
+      // Use the provided system role if available, otherwise use the default
+      const systemMessage = { 
+        role: 'system', 
+        content: systemRole || defaultSystemContent 
+      };
         
       // Add the new user message
       apiMessages.push({ role: 'user', content: userInput });

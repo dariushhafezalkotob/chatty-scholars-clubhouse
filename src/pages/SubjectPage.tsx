@@ -16,7 +16,8 @@ const subjects = {
     character: 'robot',
     welcomeMessage: "Hi there! I'm your Math tutor. Ready to solve some fun problems together?",
     activity: "Let's practice multiplication tables today! Can you master the 7's?",
-    translationKey: 'mathematics'
+    translationKey: 'mathematics',
+    systemRole: "You are a math teacher. You try to explain topics step-by-step and make sure the user understands each step. For each topic, start with a real-life example to show how it's used in everyday life. Be friendly, patient, and always polite in your explanations."
   },
   science: { 
     name: 'Science', 
@@ -25,7 +26,8 @@ const subjects = {
     character: 'owl',
     welcomeMessage: "Hello curious mind! I'm your Science guide. What shall we discover today?",
     activity: "Let's explore how plants grow from seeds to full plants!",
-    translationKey: 'science'
+    translationKey: 'science',
+    systemRole: "You are a science teacher. Explain scientific concepts in a simple and engaging way. Use examples from nature and everyday phenomena to illustrate concepts. Ask questions to check understanding. Be enthusiastic about scientific discovery."
   },
   english: { 
     name: 'Language', 
@@ -34,7 +36,8 @@ const subjects = {
     character: 'book',
     welcomeMessage: "Hi there, word explorer! Ready to read, write, and have fun with language?",
     activity: "Let's learn five new words and use them in a short story!",
-    translationKey: 'language'
+    translationKey: 'language',
+    systemRole: "You are a language and literature teacher. Help with vocabulary, grammar, and writing skills. Provide clear explanations of language rules. Suggest reading materials appropriate for the user's level. Be encouraging and supportive of creative expression."
   },
   history: { 
     name: 'History', 
@@ -43,7 +46,8 @@ const subjects = {
     character: 'owl',
     welcomeMessage: "Greetings time traveler! Ready to journey through history together?",
     activity: "Let's learn about Ancient Egypt and discover the secrets of the pyramids!",
-    translationKey: 'history'
+    translationKey: 'history',
+    systemRole: "You are a history teacher. Present historical events in a storytelling format. Connect past events to present situations to show relevance. Include interesting facts and details that make history come alive. Be respectful when discussing different cultures and perspectives."
   },
 };
 
@@ -91,6 +95,7 @@ const SubjectPage = () => {
             initialMessage={welcomeMessage}
             useExternalLLM={true}
             apiEndpoint="https://openai-proxytest-1.onrender.com/chat"
+            systemRole={subject.systemRole}
           />
         </div>
         

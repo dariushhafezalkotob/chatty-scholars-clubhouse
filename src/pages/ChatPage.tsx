@@ -16,6 +16,9 @@ const ChatPage = () => {
   const welcomeMessage = translations['chat.welcome.general'] || 
     "Hi there! I'm your friendly tutor. What subject would you like to explore today?";
   
+  // Define a general system role for the chat
+  const generalSystemRole = "You are a friendly and helpful AI tutor. You provide clear and concise explanations on various subjects. You're patient, encouraging, and adapt your teaching style to the user's needs. You ask questions to ensure understanding and provide examples to illustrate concepts.";
+  
   return (
     <div className="container mx-auto py-6">
       <div className="mb-4">
@@ -29,6 +32,7 @@ const ChatPage = () => {
           initialMessage={welcomeMessage}
           useExternalLLM={true}
           apiEndpoint="https://openai-proxytest-1.onrender.com/chat"
+          systemRole={generalSystemRole}
         />
       </div>
     </div>

@@ -58,7 +58,7 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
   
   return (
     <div className="flex gap-1 mb-3 items-end">
-      <TutorCharacter type={characterType} size="xs" />
+      <TutorCharacter type={characterType} size="sm" />
       <div className={`
         ${fontClass} max-w-[80%] rounded-2xl 
         rounded-tl-sm
