@@ -28,7 +28,7 @@ const ChatPage = () => {
         <ChatInterface 
           initialMessage={welcomeMessage}
           useExternalLLM={true}
-          apiEndpoint="http://localhost:8000/chat"
+          apiEndpoint="https://openai-proxytest-1.onrender.com/chat"
         />
       </div>
     </div>

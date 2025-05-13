@@ -89,7 +89,7 @@ const SubjectPage = () => {
             characterType={subject.character as 'owl' | 'robot' | 'book'} 
             initialMessage={welcomeMessage}
             useExternalLLM={true}
-            apiEndpoint="http://localhost:8000/chat"
+            apiEndpoint="https://openai-proxytest-1.onrender.com/chat"
           />
         </div>
         
