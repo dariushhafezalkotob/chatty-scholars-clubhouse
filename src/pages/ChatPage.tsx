@@ -27,6 +27,8 @@ const ChatPage = () => {
       <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-md h-[600px] flex flex-col">
         <ChatInterface 
           initialMessage={welcomeMessage}
+          useExternalLLM={true}
+          apiEndpoint="http://localhost:8000/chat"
         />
       </div>
     </div>

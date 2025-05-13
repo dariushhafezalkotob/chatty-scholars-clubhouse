@@ -88,6 +88,8 @@ const SubjectPage = () => {
             subject={subjectName} 
             characterType={subject.character as 'owl' | 'robot' | 'book'} 
             initialMessage={welcomeMessage}
+            useExternalLLM={true}
+            apiEndpoint="http://localhost:8000/chat"
           />
         </div>
         

@@ -7,26 +7,33 @@ import { Input } from '@/components/ui/input';
 import ChatMessage, { MessageType } from './ChatMessage';
 import TutorCharacter from '@/components/characters/TutorCharacter';
 import { ScrollArea } from '@/components/ui/scroll-area';
+import { useToast } from '@/hooks/use-toast';
 
 interface Message {
   id: string;
   type: MessageType;
   content: string;
+  role?: string; // Added for API compatibility
 }
 
 interface ChatInterfaceProps {
   subject?: string;
   characterType?: 'owl' | 'robot' | 'book';
   initialMessage?: string;
+  useExternalLLM?: boolean; // New prop to toggle external LLM usage
+  apiEndpoint?: string; // New prop for API endpoint
 }
 
 const ChatInterface = ({
   subject,
   characterType = 'owl',
-  initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?"
+  initialMessage = "Hi there! I'm your friendly tutor. What would you like to learn today?",
+  useExternalLLM = false,
+  apiEndpoint = 'http://localhost:8000/chat', // Default endpoint
 }: ChatInterfaceProps) => {
   const { ageGroup } = useTheme();
   const { translations } = useLanguage();
+  const { toast } = useToast();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   const [input, setInput] = useState('');
   const [messages, setMessages] = useState<Message[]>([
@@ -34,8 +41,10 @@ const ChatInterface = ({
       id: '1',
       type: 'assistant',
       content: initialMessage,
+      role: 'assistant',
     },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const scrollAreaRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -56,28 +65,66 @@ const ChatInterface = ({
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = () => {
-    if (!input.trim()) return;
-
-    // Add user message
-    const userMessage: Message = {
-      id: Date.now().toString(),
-      type: 'user',
-      content: input,
-    };
-
-    setMessages((prev) => [...prev, userMessage]);
-    setInput('');
-
-    // Simulate assistant response after a short delay
-    setTimeout(() => {
-      const assistantMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        type: 'assistant',
-        content: getAssistantResponse(input, subject),
+  const callExternalLLM = async (userInput: string) => {
+    try {
+      setIsLoading(true);
+      
+      // Convert our messages to the format expected by the API
+      const apiMessages = messages.map(msg => ({
+        role: msg.type === 'user' ? 'user' : 'assistant',
+        content: msg.content
+      }));
+      
+      // Add a system message for the specific subject if available
+      const systemMessage = subject 
+        ? { role: 'system', content: `You are a helpful and knowledgeable ${subject} tutor.` }
+        : { role: 'system', content: 'You are a helpful and friendly tutor.' };
+        
+      // Add the new user message
+      apiMessages.push({ role: 'user', content: userInput });
+      
+      // Prepare the request payload
+      const payload = {
+        messages: [systemMessage, ...apiMessages]
       };
-      setMessages((prev) => [...prev, assistantMessage]);
-    }, 1000);
+      
+      // Make the API call
+      const response = await fetch(apiEndpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+      
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}`);
+      }
+      
+      const data = await response.json();
+      
+      // Extract the assistant's response from the API response
+      let assistantResponse = '';
+      if (data.choices && data.choices[0] && data.choices[0].message) {
+        assistantResponse = data.choices[0].message.content;
+      } else if (data.content) {
+        assistantResponse = data.content;
+      } else {
+        assistantResponse = "I'm sorry, I couldn't generate a response.";
+      }
+      
+      return assistantResponse;
+    } catch (error) {
+      console.error('Error calling external LLM:', error);
+      toast({
+        title: "Error",
+        description: "Failed to get a response from the AI service.",
+        variant: "destructive",
+      });
+      return "I'm sorry, there was an error connecting to the AI service.";
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const getAssistantResponse = (userInput: string, subject?: string): string => {
@@ -91,6 +138,59 @@ const ChatInterface = ({
       return "I'm here to help! What would you like to know?";
     }
     return "That's interesting! Would you like to learn more about this topic?";
+  };
+
+  const handleSend = async () => {
+    if (!input.trim() || isLoading) return;
+
+    // Add user message
+    const userMessage: Message = {
+      id: Date.now().toString(),
+      type: 'user',
+      content: input,
+      role: 'user',
+    };
+
+    setMessages((prev) => [...prev, userMessage]);
+    setInput('');
+    
+    // Handle response generation
+    if (useExternalLLM) {
+      // Add a temporary loading message
+      const loadingId = (Date.now() + 1).toString();
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: loadingId,
+          type: 'assistant',
+          content: "...",
+          role: 'assistant',
+        },
+      ]);
+      
+      // Get response from external LLM
+      const response = await callExternalLLM(input);
+      
+      // Replace the loading message with the actual response
+      setMessages((prev) => 
+        prev.map(msg => 
+          msg.id === loadingId 
+            ? { ...msg, content: response } 
+            : msg
+        )
+      );
+    } else {
+      // Use the original local response generation
+      setTimeout(() => {
+        const assistantMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          type: 'assistant',
+          content: getAssistantResponse(input, subject),
+          role: 'assistant',
+        };
+        setMessages((prev) => [...prev, assistantMessage]);
+      }, 1000);
+    }
   };
 
   const placeholderText = translations['chat.placeholder'] || "Type your message...";
@@ -136,11 +236,13 @@ const ChatInterface = ({
           placeholder={placeholderText}
           className={`flex-1 ${fontClass} text-base py-6 rounded-xl`}
           onKeyPress={(e) => e.key === 'Enter' && handleSend()}
+          disabled={isLoading}
         />
         <Button
           onClick={handleSend}
           className="rounded-xl micro-pop"
           size="icon"
+          disabled={isLoading}
         >
           <Send className="h-5 w-5" />
         </Button>
