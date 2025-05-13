@@ -12,8 +12,39 @@ interface ChatMessageProps {
   characterType?: 'owl' | 'robot' | 'book';
 }
 
+// Function to format message content with proper line breaks and RTL/LTR handling
+const formatMessageContent = (content: string, language: string, direction: string): React.ReactNode => {
+  // Split the content by paragraphs (double new lines)
+  const paragraphs = content.split('\n\n');
+
+  return paragraphs.map((paragraph, pIndex) => {
+    // Split paragraph into lines (single new lines)
+    const lines = paragraph.split('\n');
+
+    return (
+      <div key={pIndex} className={pIndex > 0 ? 'mt-3' : ''}>
+        {lines.map((line, lIndex) => {
+          // Special handling for mathematical expressions in RTL languages
+          // Detect numerical expressions or mathematical operations
+          const formattedLine = line.replace(/(\d+[\+\-\*\/=×÷]+\d+)/g, (match) => {
+            return `<span dir="ltr" className="inline-block">${match}</span>`;
+          });
+
+          return (
+            <div key={lIndex} className={lIndex > 0 ? 'mt-1' : ''}>
+              {lIndex > 0 ? <br /> : null}
+              <span dangerouslySetInnerHTML={{ __html: formattedLine }} />
+            </div>
+          );
+        })}
+      </div>
+    );
+  });
+};
+
 const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps) => {
   const { ageGroup, colorMode } = useTheme();
+  const { language, direction } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
   // More vibrant colors for kid mode
@@ -41,6 +72,8 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
     }
   };
   
+  const formattedContent = formatMessageContent(content, language, direction);
+  
   if (type === 'user') {
     return (
       <div className="flex justify-end mb-3">
@@ -50,7 +83,7 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
           ${getUserBubbleColor()}
           px-4 py-2
         `}>
-          {content}
+          {formattedContent}
         </div>
       </div>
     );
@@ -65,7 +98,7 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
         ${getAssistantBubbleColor()}
         px-4 py-2 shadow-sm
       `}>
-        {content}
+        {formattedContent}
       </div>
     </div>
   );
