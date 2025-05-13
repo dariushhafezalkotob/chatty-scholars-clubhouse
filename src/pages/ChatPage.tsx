@@ -18,13 +18,13 @@ const ChatPage = () => {
   
   return (
     <div className="container mx-auto py-6">
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
           {titleText}
         </h1>
       </div>
       
-      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-md h-[600px] flex flex-col">
+      <div className="bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm p-6 rounded-xl shadow-md h-[80vh] flex flex-col">
         <ChatInterface 
           initialMessage={welcomeMessage}
           useExternalLLM={true}

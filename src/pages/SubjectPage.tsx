@@ -71,7 +71,7 @@ const SubjectPage = () => {
   
   return (
     <div className="container mx-auto py-6" dir={direction}>
-      <div className="mb-6">
+      <div className="mb-4">
         <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
           {subjectName}
         </h1>
@@ -83,6 +83,7 @@ const SubjectPage = () => {
           ${colorMode === 'dark' ? 'bg-gray-800/80' : 'bg-white/80'} 
           backdrop-blur-sm p-6 rounded-xl shadow-md border
           ${colorMode === 'dark' ? 'border-gray-700' : 'border-gray-100'}
+          h-[80vh]
         `}>
           <ChatInterface 
             subject={subjectName} 

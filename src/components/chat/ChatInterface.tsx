@@ -1,3 +1,4 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -199,18 +200,18 @@ const ChatInterface = ({
     : `${subject} Tutor`;
 
   return (
-    <div className="flex flex-col h-full max-h-[50vh]">
-      {/* Character and welcome */}
-      <div className="flex flex-col items-center mb-4">
-        <TutorCharacter type={characterType} size="lg" />
+    <div className="flex flex-col h-full">
+      {/* Character and welcome - Made smaller and more compact */}
+      <div className="flex items-center mb-2">
+        <TutorCharacter type={characterType} size="md" />
         {subject && (
-          <h2 className={`${fontClass} font-bold text-lg mt-2 text-center`}>
+          <h2 className={`${fontClass} font-bold text-base ml-2`}>
             {tutorTitle}
           </h2>
         )}
       </div>
 
-      {/* Messages container with fixed height and scrollable */}
+      {/* Messages container with increased height and scrollable */}
       <ScrollArea
         ref={scrollAreaRef}
         className="flex-1 mb-4 p-4 bg-secondary/20 rounded-xl overflow-hidden"
