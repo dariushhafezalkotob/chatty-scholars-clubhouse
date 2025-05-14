@@ -29,60 +29,90 @@ const isMathLine = (line: string): boolean => {
   return mathPatterns.some(pattern => pattern.test(line));
 };
 
-// Function to format mathematical expressions for better display
-const formatMathExpression = (expression: string): string => {
-  // If it's already in LaTeX format, return as is
-  if (expression.startsWith('$') || expression.startsWith('\\(') || expression.startsWith('\\[')) {
+// Function to format inline mathematical expressions
+const formatInlineMathExpression = (text: string): string => {
+  // Replace simple math expressions with LaTeX format
+  return text.replace(/(\d+[\+\-\*\/=×÷]+\d+|\(.+\)=.+)/g, match => {
+    if (match.startsWith('$') || match.startsWith('\\(')) {
+      return match;
+    }
+    return `<span class="math-inline" dir="ltr">$${match}$</span>`;
+  });
+};
+
+// Function to format block mathematical expressions for better display
+const formatBlockMathExpression = (expression: string): string => {
+  // If it's already in LaTeX format, return with proper formatting
+  if (expression.startsWith('$$') && expression.endsWith('$$')) {
     return expression;
   }
   
-  // Otherwise, wrap it in LaTeX delimiters for proper rendering
-  return `<span class="math-expression" dir="ltr">$${expression}$</span>`;
+  if (expression.startsWith('$') && expression.endsWith('$')) {
+    return `$$${expression.substring(1, expression.length - 1)}$$`;
+  }
+  
+  // Add display math delimiters for proper rendering in classic textbook style
+  return `$$${expression}$$`;
 };
 
-// Function to format message content with proper line breaks, RTL/LTR handling, and math formatting
+// Function to process text and separate math content
+const processParagraph = (paragraph: string, direction: string): React.ReactNode => {
+  const lines = paragraph.split('\n');
+  const elements: React.ReactNode[] = [];
+  
+  let currentTextBlock: string[] = [];
+  
+  // Process each line
+  lines.forEach((line, index) => {
+    if (isMathLine(line)) {
+      // If we have accumulated text, add it first
+      if (currentTextBlock.length > 0) {
+        const textContent = currentTextBlock.join('\n');
+        elements.push(
+          <div key={`text-${index}`} className="text-block">
+            <span dangerouslySetInnerHTML={{ __html: formatInlineMathExpression(textContent) }} />
+          </div>
+        );
+        currentTextBlock = [];
+      }
+      
+      // Add the math expression in a separate block
+      elements.push(
+        <div key={`math-${index}`} className={cn(
+          "my-4 py-3 px-2 bg-secondary/10 rounded-md border border-secondary/20 overflow-x-auto text-center",
+          direction === 'rtl' ? "dir-ltr" : ""
+        )}>
+          <span dangerouslySetInnerHTML={{ __html: formatBlockMathExpression(line) }} />
+        </div>
+      );
+    } else {
+      // Accumulate text content
+      currentTextBlock.push(formatInlineMathExpression(line));
+    }
+  });
+  
+  // Add any remaining text content
+  if (currentTextBlock.length > 0) {
+    const textContent = currentTextBlock.join('\n');
+    elements.push(
+      <div key="text-final" className="text-block">
+        <span dangerouslySetInnerHTML={{ __html: textContent }} />
+      </div>
+    );
+  }
+  
+  return <>{elements}</>;
+};
+
+// Function to format message content with proper paragraphs and math formatting
 const formatMessageContent = (content: string, language: string, direction: string): React.ReactNode => {
   // Split the content by paragraphs (double new lines)
   const paragraphs = content.split('\n\n');
 
   return paragraphs.map((paragraph, pIndex) => {
-    // Split paragraph into lines (single new lines)
-    const lines = paragraph.split('\n');
-
     return (
       <div key={pIndex} className={pIndex > 0 ? 'mt-4' : ''}>
-        {lines.map((line, lIndex) => {
-          // Check if the line is primarily mathematical content
-          const isMath = isMathLine(line);
-          
-          // Process the line differently based on whether it's math content or regular text
-          let processedLine = line;
-          
-          if (isMath) {
-            // Format the entire line as a math expression
-            processedLine = formatMathExpression(line);
-            
-            return (
-              <div key={lIndex} className={cn(
-                "my-2 p-2 bg-secondary/10 rounded text-center overflow-x-auto",
-                direction === 'rtl' ? "dir-ltr" : ""
-              )}>
-                <span dangerouslySetInnerHTML={{ __html: processedLine }} />
-              </div>
-            );
-          } else {
-            // For regular text, handle embedded math expressions within the text
-            processedLine = line.replace(/(\d+[\+\-\*\/=×÷]+\d+|\(.+\)=.+)/g, (match) => {
-              return formatMathExpression(match);
-            });
-            
-            return (
-              <div key={lIndex} className={lIndex > 0 && !isMath ? 'mt-1' : ''}>
-                <span dangerouslySetInnerHTML={{ __html: processedLine }} />
-              </div>
-            );
-          }
-        })}
+        {processParagraph(paragraph, direction)}
       </div>
     );
   });
