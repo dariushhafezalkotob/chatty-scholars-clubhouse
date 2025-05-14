@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Send } from 'lucide-react';
 import { useTheme } from '@/contexts/ThemeContext';
@@ -9,6 +8,7 @@ import ChatMessage, { MessageType } from './ChatMessage';
 import TutorCharacter from '@/components/characters/TutorCharacter';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { useToast } from '@/hooks/use-toast';
+import { typesetMath } from '@/lib/utils';
 
 interface Message {
   id: string;
@@ -66,6 +66,13 @@ const ChatInterface = ({
 
   useEffect(() => {
     scrollToBottom();
+  }, [messages]);
+
+  useEffect(() => {
+    // Wait for the message to be rendered before typesetting
+    setTimeout(() => {
+      typesetMath();
+    }, 100);
   }, [messages]);
 
   const callExternalLLM = async (userInput: string) => {
@@ -198,6 +205,11 @@ const ChatInterface = ({
           role: 'assistant',
         };
         setMessages((prev) => [...prev, assistantMessage]);
+        
+        // Typeset math after message is added
+        setTimeout(() => {
+          typesetMath();
+        }, 100);
       }, 1000);
     }
   };

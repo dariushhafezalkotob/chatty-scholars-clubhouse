@@ -1,8 +1,8 @@
-
 import React from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import TutorCharacter from '@/components/characters/TutorCharacter';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { cn } from '@/lib/utils';
 
 export type MessageType = 'user' | 'assistant';
 
@@ -12,7 +12,34 @@ interface ChatMessageProps {
   characterType?: 'owl' | 'robot' | 'book';
 }
 
-// Function to format message content with proper line breaks and RTL/LTR handling
+// Function to detect if a line contains primarily mathematical content
+const isMathLine = (line: string): boolean => {
+  // Check for common math patterns - equations, operations, etc.
+  const mathPatterns = [
+    /\d+[\+\-\*\/=×÷]+\d+/,     // Basic operations
+    /\\frac{.+}{.+}/,           // Fractions
+    /\\sum|\\int|\\lim/,         // Calculus symbols
+    /[a-z]\^[0-9]/i,            // Powers
+    /\\sqrt{.+}/,               // Square roots
+    /\$\$.+\$\$/,               // LaTeX math block
+    /\$.+\$/                    // LaTeX inline math
+  ];
+  
+  return mathPatterns.some(pattern => pattern.test(line));
+};
+
+// Function to format mathematical expressions for better display
+const formatMathExpression = (expression: string): string => {
+  // If it's already in LaTeX format, return as is
+  if (expression.startsWith('$') || expression.startsWith('\\(') || expression.startsWith('\\[')) {
+    return expression;
+  }
+  
+  // Otherwise, wrap it in LaTeX delimiters for proper rendering
+  return `<span class="math-expression" dir="ltr">$${expression}$</span>`;
+};
+
+// Function to format message content with proper line breaks, RTL/LTR handling, and math formatting
 const formatMessageContent = (content: string, language: string, direction: string): React.ReactNode => {
   // Split the content by paragraphs (double new lines)
   const paragraphs = content.split('\n\n');
@@ -22,20 +49,38 @@ const formatMessageContent = (content: string, language: string, direction: stri
     const lines = paragraph.split('\n');
 
     return (
-      <div key={pIndex} className={pIndex > 0 ? 'mt-3' : ''}>
+      <div key={pIndex} className={pIndex > 0 ? 'mt-4' : ''}>
         {lines.map((line, lIndex) => {
-          // Special handling for mathematical expressions in RTL languages
-          // Detect numerical expressions or mathematical operations
-          const formattedLine = line.replace(/(\d+[\+\-\*\/=×÷]+\d+)/g, (match) => {
-            return `<span dir="ltr" className="inline-block">${match}</span>`;
-          });
-
-          return (
-            <div key={lIndex} className={lIndex > 0 ? 'mt-1' : ''}>
-              {lIndex > 0 ? <br /> : null}
-              <span dangerouslySetInnerHTML={{ __html: formattedLine }} />
-            </div>
-          );
+          // Check if the line is primarily mathematical content
+          const isMath = isMathLine(line);
+          
+          // Process the line differently based on whether it's math content or regular text
+          let processedLine = line;
+          
+          if (isMath) {
+            // Format the entire line as a math expression
+            processedLine = formatMathExpression(line);
+            
+            return (
+              <div key={lIndex} className={cn(
+                "my-2 p-2 bg-secondary/10 rounded text-center overflow-x-auto",
+                direction === 'rtl' ? "dir-ltr" : ""
+              )}>
+                <span dangerouslySetInnerHTML={{ __html: processedLine }} />
+              </div>
+            );
+          } else {
+            // For regular text, handle embedded math expressions within the text
+            processedLine = line.replace(/(\d+[\+\-\*\/=×÷]+\d+|\(.+\)=.+)/g, (match) => {
+              return formatMathExpression(match);
+            });
+            
+            return (
+              <div key={lIndex} className={lIndex > 0 && !isMath ? 'mt-1' : ''}>
+                <span dangerouslySetInnerHTML={{ __html: processedLine }} />
+              </div>
+            );
+          }
         })}
       </div>
     );
