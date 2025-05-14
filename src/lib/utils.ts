@@ -8,7 +8,7 @@ export function cn(...inputs: ClassValue[]) {
 
 // Function to typeset MathJax after content updates
 export function typesetMath() {
-  if (window.MathJax && window.MathJax.typesetPromise) {
+  if (typeof window !== 'undefined' && window.MathJax && window.MathJax.typesetPromise) {
     try {
       window.MathJax.typesetPromise();
     } catch (e) {

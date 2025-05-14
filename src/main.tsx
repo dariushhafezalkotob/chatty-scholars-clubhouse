@@ -4,7 +4,7 @@ import App from './App.tsx'
 import './index.css'
 
 // Initialize MathJax
-window.MathJax = {
+(window as any).MathJax = {
   tex: {
     inlineMath: [['$', '$'], ['\\(', '\\)']],
     displayMath: [['$$', '$$'], ['\\[', '\\]']],

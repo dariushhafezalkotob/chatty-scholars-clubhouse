@@ -1,8 +1,9 @@
-import React from 'react';
+
+import React, { useEffect } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import TutorCharacter from '@/components/characters/TutorCharacter';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { cn } from '@/lib/utils';
+import { cn, typesetMath } from '@/lib/utils';
 
 export type MessageType = 'user' | 'assistant';
 
@@ -91,6 +92,11 @@ const ChatMessage = ({ type, content, characterType = 'owl' }: ChatMessageProps)
   const { ageGroup, colorMode } = useTheme();
   const { language, direction } = useLanguage();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
+  
+  // Run MathJax typesetting after the component renders
+  useEffect(() => {
+    typesetMath();
+  }, [content]);
   
   // More vibrant colors for kid mode
   const getUserBubbleColor = () => {
