@@ -73,7 +73,7 @@ const AuthCard = () => {
     setSignupData(prev => ({ ...prev, [name]: value }));
   };
   
-  // Translation keys
+  // Translation keys - getting the proper translations or falling back to default values
   const loginText = translations['auth.login'] || 'Login';
   const signupText = translations['auth.signup'] || 'Sign Up';
   const emailText = translations['auth.email'] || 'Email';

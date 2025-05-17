@@ -13,7 +13,7 @@ import LanguageSelector from './LanguageSelector';
 
 const AppLayout = () => {
   const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
-  const { translations } = useLanguage();
+  const { translations, direction } = useLanguage();
   const { isAuthenticated, logout } = useAuth();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
@@ -34,14 +34,14 @@ const AppLayout = () => {
   // If not authenticated, just render the outlet (which will be the AuthCard on index page)
   if (!isAuthenticated) {
     return (
-      <div className={`min-h-screen ${getGradientBg()} ${themeClass} flex items-center justify-center overflow-auto`}>
+      <div className={`min-h-screen ${getGradientBg()} ${themeClass} flex items-center justify-center overflow-auto`} dir={direction}>
         <Outlet />
       </div>
     );
   }
     
   return (
-    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
+    <div className={`min-h-screen ${getGradientBg()} ${themeClass}`} dir={direction}>
       <SidebarProvider
         defaultOpen={!isMobile}
         open={sidebarOpen}

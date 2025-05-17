@@ -7,6 +7,23 @@ const translations = {
   'app.kids': 'Kinder',
   'app.teen': 'Jugend',
   
+  // Authentication
+  'auth.login': 'Anmelden',
+  'auth.signup': 'Registrieren',
+  'auth.email': 'E-Mail',
+  'auth.password': 'Passwort',
+  'auth.name': 'Vorname',
+  'auth.surname': 'Nachname',
+  'auth.childAge': 'Alter des Kindes',
+  'auth.childGrade': 'Klasse des Kindes',
+  'auth.childGender': 'Geschlecht des Kindes',
+  'auth.male': 'Männlich',
+  'auth.female': 'Weiblich',
+  'auth.other': 'Divers',
+  'auth.selectLanguage': 'Sprache auswählen',
+  'auth.welcome': 'Willkommen bei Lernquest',
+  'auth.account': 'Dein Konto',
+  
   // Subjects
   'subject.mathematics': 'Mathematik',
   'subject.mathematics.desc': 'Lerne Zahlen, Formen und löse lustige Rätsel!',

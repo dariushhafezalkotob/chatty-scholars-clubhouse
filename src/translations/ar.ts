@@ -7,6 +7,23 @@ const translations = {
   'app.kids': 'الأطفال',
   'app.teen': 'المراهقين',
   
+  // Authentication
+  'auth.login': 'تسجيل الدخول',
+  'auth.signup': 'إنشاء حساب',
+  'auth.email': 'البريد الإلكتروني',
+  'auth.password': 'كلمة المرور',
+  'auth.name': 'الاسم',
+  'auth.surname': 'اللقب',
+  'auth.childAge': 'عمر الطفل',
+  'auth.childGrade': 'صف الطفل',
+  'auth.childGender': 'جنس الطفل',
+  'auth.male': 'ذكر',
+  'auth.female': 'أنثى',
+  'auth.other': 'آخر',
+  'auth.selectLanguage': 'اختر اللغة',
+  'auth.welcome': 'مرحبًا بك في رحلة التعلم',
+  'auth.account': 'حسابك',
+  
   // Subjects
   'subject.mathematics': 'الرياضيات',
   'subject.mathematics.desc': 'تعلم الأرقام والأشكال وحل الألغاز الممتعة!',

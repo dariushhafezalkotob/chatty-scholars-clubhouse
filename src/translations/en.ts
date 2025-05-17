@@ -7,6 +7,23 @@ const translations = {
   'app.kids': 'Kids',
   'app.teen': 'Teen',
   
+  // Authentication
+  'auth.login': 'Login',
+  'auth.signup': 'Sign Up',
+  'auth.email': 'Email',
+  'auth.password': 'Password',
+  'auth.name': 'Name',
+  'auth.surname': 'Surname',
+  'auth.childAge': 'Child Age',
+  'auth.childGrade': 'Child Grade',
+  'auth.childGender': 'Child Gender',
+  'auth.male': 'Male',
+  'auth.female': 'Female',
+  'auth.other': 'Other',
+  'auth.selectLanguage': 'Select Language',
+  'auth.welcome': 'Welcome to Learn Quest',
+  'auth.account': 'Your Account',
+  
   // Subjects
   'subject.mathematics': 'Mathematics',
   'subject.mathematics.desc': 'Learn numbers, shapes, and solve fun puzzles!',

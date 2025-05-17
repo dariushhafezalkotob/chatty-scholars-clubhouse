@@ -1,3 +1,4 @@
+
 import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 
 // Define available languages
@@ -49,25 +50,33 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     const newDirection = languageDirections[newLanguage];
     setDirection(newDirection);
     
-    // Don't change document direction
-    // document.documentElement.dir = newDirection;
+    // Set HTML attributes for language and direction
     document.documentElement.lang = newLanguage;
+    document.documentElement.dir = newDirection;
     
     // Load translations dynamically
     try {
+      // Import the translation file dynamically
       const translationsModule = await import(`../translations/${newLanguage}.ts`);
       setTranslations(translationsModule.default);
+      console.log(`Loaded translations for ${newLanguage}:`, translationsModule.default);
     } catch (error) {
       console.error(`Failed to load translations for ${newLanguage}`, error);
+      // Fallback to empty translations if loading fails
       setTranslations({});
     }
     
+    // Set the language state
     setLanguageState(newLanguage);
+    
+    // Store the selected language in local storage
+    localStorage.setItem('selectedLanguage', newLanguage);
   };
 
-  // Initialize translations on mount
+  // Initialize translations on mount - with stored preference if available
   useEffect(() => {
-    setLanguage('en');
+    const storedLanguage = localStorage.getItem('selectedLanguage') as Language;
+    setLanguage(storedLanguage || 'en');
   }, []); 
 
   return (

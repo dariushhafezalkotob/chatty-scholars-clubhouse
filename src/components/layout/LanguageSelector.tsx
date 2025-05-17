@@ -12,16 +12,18 @@ import { useLanguage, languageList } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
 
 const LanguageSelector = () => {
-  const { language, setLanguage } = useLanguage();
+  const { language, setLanguage, translations } = useLanguage();
   const { ageGroup } = useTheme();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
+  
+  const selectLanguageText = translations['auth.selectLanguage'] || 'Select Language';
   
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="ghost" size="icon" className="rounded-full">
           <Globe className="h-5 w-5" />
-          <span className="sr-only">Select language</span>
+          <span className="sr-only">{selectLanguageText}</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border z-50">

@@ -7,6 +7,23 @@ const translations = {
   'app.kids': 'کودکان',
   'app.teen': 'نوجوان',
   
+  // Authentication
+  'auth.login': 'ورود',
+  'auth.signup': 'ثبت نام',
+  'auth.email': 'ایمیل',
+  'auth.password': 'رمز عبور',
+  'auth.name': 'نام',
+  'auth.surname': 'نام خانوادگی',
+  'auth.childAge': 'سن کودک',
+  'auth.childGrade': 'کلاس کودک',
+  'auth.childGender': 'جنسیت کودک',
+  'auth.male': 'پسر',
+  'auth.female': 'دختر',
+  'auth.other': 'سایر',
+  'auth.selectLanguage': 'انتخاب زبان',
+  'auth.welcome': 'به سفر یادگیری خوش آمدید',
+  'auth.account': 'حساب کاربری شما',
+  
   // Subjects
   'subject.mathematics': 'ریاضیات',
   'subject.mathematics.desc': 'اعداد و اشکال را یاد بگیرید و پازل های سرگرم کننده حل کنید!',

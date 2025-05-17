@@ -7,6 +7,23 @@ const translations = {
   'app.kids': 'Niños',
   'app.teen': 'Adolescentes',
   
+  // Authentication
+  'auth.login': 'Iniciar sesión',
+  'auth.signup': 'Registrarse',
+  'auth.email': 'Correo electrónico',
+  'auth.password': 'Contraseña',
+  'auth.name': 'Nombre',
+  'auth.surname': 'Apellido',
+  'auth.childAge': 'Edad del niño',
+  'auth.childGrade': 'Grado del niño',
+  'auth.childGender': 'Género del niño',
+  'auth.male': 'Masculino',
+  'auth.female': 'Femenino',
+  'auth.other': 'Otro',
+  'auth.selectLanguage': 'Seleccionar idioma',
+  'auth.welcome': 'Bienvenido a Aventura de Aprendizaje',
+  'auth.account': 'Tu cuenta',
+  
   // Subjects
   'subject.mathematics': 'Matemáticas',
   'subject.mathematics.desc': '¡Aprende números, formas y resuelve divertidos acertijos!',
