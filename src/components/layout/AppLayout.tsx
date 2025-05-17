@@ -34,7 +34,7 @@ const AppLayout = () => {
   // If not authenticated, just render the outlet (which will be the AuthCard on index page)
   if (!isAuthenticated) {
     return (
-      <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
+      <div className={`min-h-screen ${getGradientBg()} ${themeClass} flex items-center justify-center overflow-auto`}>
         <Outlet />
       </div>
     );
@@ -50,7 +50,7 @@ const AppLayout = () => {
         <div className="flex min-h-screen w-full flex-row">
           <SubjectsSidebar />
           
-          <main className="flex-1 p-4">
+          <main className="flex-1 p-4 overflow-auto">
             <div className="flex justify-between mb-2">
               <Button 
                 variant="ghost" 

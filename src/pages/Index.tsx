@@ -70,7 +70,7 @@ const Index = () => {
   
   if (!isAuthenticated) {
     return (
-      <div className="flex items-center justify-center h-[80vh]">
+      <div className="flex items-center justify-center min-h-[80vh] py-8 overflow-auto">
         <AuthCard />
       </div>
     );

@@ -22,7 +22,8 @@ import {
 import { useAuth } from '@/contexts/AuthContext';
 import { useLanguage, languageList } from '@/contexts/LanguageContext';
 import { useTheme } from '@/contexts/ThemeContext';
-import { Globe } from 'lucide-react';
+import { Globe, ScrollIcon } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AuthCard = () => {
   const { login, signup } = useAuth();
@@ -90,7 +91,7 @@ const AuthCard = () => {
   const accountText = translations['auth.account'] || 'Your Account';
   
   return (
-    <Card className={`w-[350px] md:w-[450px] ${fontClass} shadow-xl`}>
+    <Card className={`w-[350px] md:w-[450px] ${fontClass} shadow-xl max-h-[90vh]`}>
       <CardHeader>
         <CardTitle className="text-center text-2xl">{welcomeText}</CardTitle>
         <CardDescription className="text-center">{accountText}</CardDescription>
@@ -148,92 +149,94 @@ const AuthCard = () => {
           </TabsContent>
           
           <TabsContent value="signup">
-            <form onSubmit={handleSignupSubmit}>
-              <div className="grid gap-4">
-                <div className="grid grid-cols-2 gap-4">
+            <ScrollArea className="h-[400px] pr-4">
+              <form onSubmit={handleSignupSubmit}>
+                <div className="grid gap-4">
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="signup-name">{nameText}</Label>
+                      <Input 
+                        id="signup-name" 
+                        name="name" 
+                        value={signupData.name} 
+                        onChange={handleSignupChange} 
+                        required 
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="signup-surname">{surnameText}</Label>
+                      <Input 
+                        id="signup-surname" 
+                        name="surname" 
+                        value={signupData.surname} 
+                        onChange={handleSignupChange} 
+                        required 
+                      />
+                    </div>
+                  </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="signup-name">{nameText}</Label>
+                    <Label htmlFor="signup-email">{emailText}</Label>
                     <Input 
-                      id="signup-name" 
-                      name="name" 
-                      value={signupData.name} 
+                      id="signup-email" 
+                      name="email" 
+                      type="email" 
+                      value={signupData.email} 
                       onChange={handleSignupChange} 
                       required 
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="signup-surname">{surnameText}</Label>
+                    <Label htmlFor="signup-password">{passwordText}</Label>
                     <Input 
-                      id="signup-surname" 
-                      name="surname" 
-                      value={signupData.surname} 
+                      id="signup-password" 
+                      name="password" 
+                      type="password" 
+                      value={signupData.password} 
                       onChange={handleSignupChange} 
                       required 
                     />
                   </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="signup-child-age">{childAgeText}</Label>
+                    <Input 
+                      id="signup-child-age" 
+                      name="childAge" 
+                      type="number" 
+                      value={signupData.childAge} 
+                      onChange={handleSignupChange} 
+                      required 
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="signup-child-grade">{childGradeText}</Label>
+                    <Input 
+                      id="signup-child-grade" 
+                      name="childGrade" 
+                      value={signupData.childGrade} 
+                      onChange={handleSignupChange} 
+                      required 
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="signup-child-gender">{childGenderText}</Label>
+                    <Select 
+                      value={signupData.childGender} 
+                      onValueChange={(value) => handleSelectChange('childGender', value)}
+                    >
+                      <SelectTrigger id="signup-child-gender">
+                        <SelectValue placeholder={childGenderText} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="male">{maleText}</SelectItem>
+                        <SelectItem value="female">{femaleText}</SelectItem>
+                        <SelectItem value="other">{otherText}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <Button className="mt-2" type="submit">{signupText}</Button>
                 </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="signup-email">{emailText}</Label>
-                  <Input 
-                    id="signup-email" 
-                    name="email" 
-                    type="email" 
-                    value={signupData.email} 
-                    onChange={handleSignupChange} 
-                    required 
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="signup-password">{passwordText}</Label>
-                  <Input 
-                    id="signup-password" 
-                    name="password" 
-                    type="password" 
-                    value={signupData.password} 
-                    onChange={handleSignupChange} 
-                    required 
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="signup-child-age">{childAgeText}</Label>
-                  <Input 
-                    id="signup-child-age" 
-                    name="childAge" 
-                    type="number" 
-                    value={signupData.childAge} 
-                    onChange={handleSignupChange} 
-                    required 
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="signup-child-grade">{childGradeText}</Label>
-                  <Input 
-                    id="signup-child-grade" 
-                    name="childGrade" 
-                    value={signupData.childGrade} 
-                    onChange={handleSignupChange} 
-                    required 
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="signup-child-gender">{childGenderText}</Label>
-                  <Select 
-                    value={signupData.childGender} 
-                    onValueChange={(value) => handleSelectChange('childGender', value)}
-                  >
-                    <SelectTrigger id="signup-child-gender">
-                      <SelectValue placeholder={childGenderText} />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="male">{maleText}</SelectItem>
-                      <SelectItem value="female">{femaleText}</SelectItem>
-                      <SelectItem value="other">{otherText}</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button className="mt-2" type="submit">{signupText}</Button>
-              </div>
-            </form>
+              </form>
+            </ScrollArea>
           </TabsContent>
         </Tabs>
       </CardContent>
