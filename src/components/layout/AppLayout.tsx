@@ -3,16 +3,18 @@ import React, { useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 import { SidebarProvider } from '@/components/ui/sidebar';
 import SubjectsSidebar from './SubjectsSidebar';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Moon, Sun, Home } from 'lucide-react';
+import { Moon, Sun, Home, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LanguageSelector from './LanguageSelector';
 
 const AppLayout = () => {
   const { themeClass, colorMode, toggleColorMode, ageGroup } = useTheme();
   const { translations } = useLanguage();
+  const { isAuthenticated, logout } = useAuth();
   const isMobile = useIsMobile();
   const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
   const navigate = useNavigate();
@@ -28,6 +30,15 @@ const AppLayout = () => {
       return 'bg-gradient-to-br from-primary/10 to-secondary/20';
     }
   };
+
+  // If not authenticated, just render the outlet (which will be the AuthCard on index page)
+  if (!isAuthenticated) {
+    return (
+      <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
+        <Outlet />
+      </div>
+    );
+  }
     
   return (
     <div className={`min-h-screen ${getGradientBg()} ${themeClass}`}>
@@ -61,6 +72,15 @@ const AppLayout = () => {
                   className="rounded-full"
                 >
                   {colorMode === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
+                </Button>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={logout}
+                  aria-label="Log out"
+                  className="rounded-full"
+                >
+                  <LogOut className="h-5 w-5" />
                 </Button>
               </div>
             </div>

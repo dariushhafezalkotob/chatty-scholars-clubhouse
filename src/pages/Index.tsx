@@ -4,6 +4,8 @@ import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+import AuthCard from '@/components/auth/AuthCard';
 import SubjectCard from '@/components/cards/SubjectCard';
 import DailyActivityCard from '@/components/cards/DailyActivityCard';
 import ProgressTracker from '@/components/progress/ProgressTracker';
@@ -47,6 +49,7 @@ const subjects = [
 const Index = () => {
   const { ageGroup, setAgeGroup, themeClass, colorMode } = useTheme();
   const { translations } = useLanguage();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
@@ -64,6 +67,14 @@ const Index = () => {
   const modeText = ageGroup === 'young' ? 
     (translations['app.teen'] || 'Teen') : 
     (translations['app.kids'] || 'Kids');
+  
+  if (!isAuthenticated) {
+    return (
+      <div className="flex items-center justify-center h-[80vh]">
+        <AuthCard />
+      </div>
+    );
+  }
   
   return (
     <div className="container mx-auto py-6">
