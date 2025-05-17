@@ -27,7 +27,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 
 const AuthCard = () => {
   const { login, signup } = useAuth();
-  const { language, setLanguage, translations } = useLanguage();
+  const { language, setLanguage, translations, direction } = useLanguage();
   const { ageGroup } = useTheme();
   
   // Login form state
@@ -121,7 +121,7 @@ const AuthCard = () => {
           </TabsList>
           
           <TabsContent value="login">
-            <form onSubmit={handleLoginSubmit}>
+            <form onSubmit={handleLoginSubmit} dir={direction}>
               <div className="grid gap-4">
                 <div className="grid gap-2">
                   <Label htmlFor="login-email">{emailText}</Label>
@@ -150,7 +150,7 @@ const AuthCard = () => {
           
           <TabsContent value="signup">
             <ScrollArea className="h-[400px] pr-4">
-              <form onSubmit={handleSignupSubmit}>
+              <form onSubmit={handleSignupSubmit} dir={direction}>
                 <div className="grid gap-4">
                   <div className="grid grid-cols-2 gap-4">
                     <div className="grid gap-2">
