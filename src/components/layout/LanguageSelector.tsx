@@ -1,40 +1,58 @@
 
 import React from 'react';
 import { Button } from '@/components/ui/button';
-import { Globe } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { useLanguage, languageList } from '@/contexts/LanguageContext';
-import { useTheme } from '@/contexts/ThemeContext';
+import { Globe } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
+
+const languages = [
+  { code: 'en', name: 'English', flag: '🇺🇸' },
+  { code: 'es', name: 'Español', flag: '🇪🇸' },
+  { code: 'fr', name: 'Français', flag: '🇫🇷' },
+  { code: 'de', name: 'Deutsch', flag: '🇩🇪' },
+  { code: 'ar', name: 'العربية', flag: '🇸🇦' },
+  { code: 'fa', name: 'فارسی', flag: '🇮🇷' },
+];
 
 const LanguageSelector = () => {
-  const { language, setLanguage, translations } = useLanguage();
-  const { ageGroup } = useTheme();
-  const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
+  const { language, setLanguage } = useLanguage();
+  const { user } = useAuth();
   
-  const selectLanguageText = translations['auth.selectLanguage'] || 'Select Language';
+  // Check if user is preschool age (5-6 years old)
+  const isPreschool = user?.childAge && user.childAge >= 5 && user.childAge <= 6;
   
+  const currentLanguage = languages.find(lang => lang.code === language) || languages[0];
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="rounded-full">
+        <Button 
+          variant="ghost" 
+          size="icon" 
+          className={`rounded-full ${isPreschool ? 'bg-white/20 hover:bg-white/30 text-white' : ''}`}
+          aria-label="Select language"
+        >
           <Globe className="h-5 w-5" />
-          <span className="sr-only">{selectLanguageText}</span>
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="bg-white dark:bg-gray-800 border z-50">
-        {languageList.map((lang) => (
+      <DropdownMenuContent 
+        align="end" 
+        className={`${isPreschool ? 'bg-white/90 backdrop-blur-sm border-white/20' : ''}`}
+      >
+        {languages.map((lang) => (
           <DropdownMenuItem
             key={lang.code}
-            onClick={() => setLanguage(lang.code)}
-            className={`${fontClass} ${language === lang.code ? 'font-bold' : ''}`}
+            onClick={() => setLanguage(lang.code as any)}
+            className={`cursor-pointer ${language === lang.code ? 'bg-primary/10' : ''}`}
           >
-            <span className="mr-2">{lang.nativeName}</span>
-            <span className="text-muted-foreground">({lang.name})</span>
+            <span className="mr-2 text-lg">{lang.flag}</span>
+            {lang.name}
           </DropdownMenuItem>
         ))}
       </DropdownMenuContent>

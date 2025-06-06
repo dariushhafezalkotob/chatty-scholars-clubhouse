@@ -37,7 +37,7 @@ const PreschoolLanding = () => {
   };
 
   return (
-    <div className={`min-h-screen ${colorMode === 'dark' ? 'bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900' : 'bg-gradient-to-br from-yellow-200 via-pink-200 to-blue-200'} p-6`}>
+    <div className="min-h-screen p-6">
       <div className="container mx-auto max-w-4xl">
         {/* Welcome Message */}
         <div className="text-center mb-12">
