@@ -1,117 +1,184 @@
 
-import React from 'react';
-import { useParams } from 'react-router-dom';
-import { Book, Compass, GraduationCap, Lightbulb } from 'lucide-react';
+import React, { useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useLanguage } from '@/contexts/LanguageContext';
-import ChatInterface from '@/components/chat/ChatInterface';
-import ProgressTracker from '@/components/progress/ProgressTracker';
-import DailyActivityCard from '@/components/cards/DailyActivityCard';
-
-const subjects = {
-  math: { 
-    name: 'Mathematics', 
-    icon: Compass, 
-    color: 'bg-sky-blue',
-    character: 'robot',
-    welcomeMessage: "Hi there! I'm your Math tutor. Ready to solve some fun problems together?",
-    activity: "Let's practice multiplication tables today! Can you master the 7's?",
-    translationKey: 'mathematics',
-    systemRole: "You are a math teacher. You try to explain topics step-by-step and make sure the user understands each step. For each topic, start with a real-life example to show how it's used in everyday life. Be friendly, patient, and always polite in your explanations."
-  },
-  science: { 
-    name: 'Science', 
-    icon: Lightbulb, 
-    color: 'bg-mint-green',
-    character: 'owl',
-    welcomeMessage: "Hello curious mind! I'm your Science guide. What shall we discover today?",
-    activity: "Let's explore how plants grow from seeds to full plants!",
-    translationKey: 'science',
-    systemRole: "You are a science teacher. Explain scientific concepts in a simple and engaging way. Use examples from nature and everyday phenomena to illustrate concepts. Ask questions to check understanding. Be enthusiastic about scientific discovery."
-  },
-  english: { 
-    name: 'Language', 
-    icon: Book, 
-    color: 'bg-coral-pink',
-    character: 'book',
-    welcomeMessage: "Hi there, word explorer! Ready to read, write, and have fun with language?",
-    activity: "Let's learn five new words and use them in a short story!",
-    translationKey: 'language',
-    systemRole: "You are a language and literature teacher. Help with vocabulary, grammar, and writing skills. Provide clear explanations of language rules. Suggest reading materials appropriate for the user's level. Be encouraging and supportive of creative expression."
-  },
-  history: { 
-    name: 'History', 
-    icon: GraduationCap, 
-    color: 'bg-sunshine-yellow',
-    character: 'owl',
-    welcomeMessage: "Greetings time traveler! Ready to journey through history together?",
-    activity: "Let's learn about Ancient Egypt and discover the secrets of the pyramids!",
-    translationKey: 'history',
-    systemRole: "You are a history teacher. Present historical events in a storytelling format. Connect past events to present situations to show relevance. Include interesting facts and details that make history come alive. Be respectful when discussing different cultures and perspectives."
-  },
-};
+import { useAuth } from '@/contexts/AuthContext';
+import { Button } from '@/components/ui/button';
+import { ArrowLeft, Play, Star, BookOpen, Calculator, Microscope } from 'lucide-react';
+import PreschoolLesson from '@/components/preschool/PreschoolLesson';
 
 const SubjectPage = () => {
-  const { subjectId = 'math' } = useParams();
+  const { subjectId } = useParams<{ subjectId: string }>();
   const { ageGroup, colorMode } = useTheme();
-  const { translations, direction } = useLanguage();
+  const { translations } = useLanguage();
+  const { user } = useAuth();
+  const navigate = useNavigate();
+  const [currentLesson, setCurrentLesson] = useState<number | null>(null);
+
+  // Check if user is preschool age
+  const isPreschool = user?.childAge && user.childAge >= 5 && user.childAge <= 6;
+
+  const getSubjectInfo = () => {
+    switch (subjectId) {
+      case 'math':
+        return {
+          name: translations['subject.mathematics'] || 'Mathematics',
+          icon: Calculator,
+          color: 'bg-sky-blue',
+          description: 'Learn numbers, counting, and basic math concepts!'
+        };
+      case 'science':
+        return {
+          name: translations['subject.science'] || 'Science',
+          icon: Microscope,
+          color: 'bg-mint-green',
+          description: 'Explore the world around us through fun experiments!'
+        };
+      case 'english':
+        return {
+          name: translations['subject.language'] || 'Language',
+          icon: BookOpen,
+          color: 'bg-coral-pink',
+          description: 'Learn letters, sounds, and basic words!'
+        };
+      default:
+        return {
+          name: 'Unknown Subject',
+          icon: BookOpen,
+          color: 'bg-gray-500',
+          description: 'Subject not found'
+        };
+    }
+  };
+
+  const subject = getSubjectInfo();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
-  
-  const subject = subjects[subjectId as keyof typeof subjects] || subjects.math;
-  
-  // Get translated subject name
-  const subjectName = subject.translationKey ?
-    translations[`subject.${subject.translationKey}`] || subject.name : subject.name;
-  
-  // Get translated welcome message
-  const welcomeMessage = subject.translationKey ?
-    translations[`chat.welcome.${subject.translationKey.toLowerCase()}`] || subject.welcomeMessage : 
-    subject.welcomeMessage;
-  
-  // Get translated activity
-  const activity = subject.translationKey ?
-    translations[`activity.${subject.translationKey.toLowerCase()}`] || subject.activity : 
-    subject.activity;
-  
-  return (
-    <div className="container mx-auto py-6" dir={direction}>
-      <div className="mb-4">
-        <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
-          {subjectName}
-        </h1>
+
+  // If preschool and lesson is selected, show the lesson component
+  if (isPreschool && currentLesson !== null) {
+    return (
+      <PreschoolLesson
+        subjectId={subjectId!}
+        lessonNumber={currentLesson}
+        onBack={() => setCurrentLesson(null)}
+        onComplete={() => {
+          setCurrentLesson(null);
+          // Could add progress tracking here
+        }}
+      />
+    );
+  }
+
+  // Preschool lesson selection
+  if (isPreschool) {
+    const lessons = [
+      { id: 1, title: '🌟 Lesson 1', description: 'Let\'s start learning!' },
+      { id: 2, title: '🎈 Lesson 2', description: 'More fun awaits!' },
+      { id: 3, title: '🌈 Lesson 3', description: 'Keep going!' }
+    ];
+
+    return (
+      <div className={`min-h-screen ${colorMode === 'dark' ? 'bg-gradient-to-br from-purple-900 via-blue-900 to-indigo-900' : 'bg-gradient-to-br from-yellow-200 via-pink-200 to-blue-200'} p-6`}>
+        <div className="container mx-auto max-w-4xl">
+          {/* Header */}
+          <div className="flex items-center mb-8">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => navigate('/')}
+              className="mr-4 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30"
+            >
+              <ArrowLeft className="h-6 w-6 text-white" />
+            </Button>
+            <h1 className="font-comic text-3xl md:text-4xl font-bold text-white drop-shadow-lg">
+              {subject.name}
+            </h1>
+          </div>
+
+          {/* Lesson Cards */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {lessons.map((lesson, index) => (
+              <div
+                key={lesson.id}
+                onClick={() => setCurrentLesson(lesson.id)}
+                className="cursor-pointer transform transition-all duration-300 hover:scale-105"
+              >
+                <div className={`
+                  rounded-3xl p-6 ${subject.color} 
+                  shadow-xl hover:shadow-2xl
+                  border-4 border-white/30
+                  backdrop-blur-sm
+                `}>
+                  <div className="text-center">
+                    <div className="text-4xl mb-4 animate-bounce" style={{ animationDelay: `${index * 200}ms` }}>
+                      <Play className="w-16 h-16 mx-auto text-white drop-shadow-lg" />
+                    </div>
+                    <h3 className="font-comic text-xl font-bold text-white mb-2">
+                      {lesson.title}
+                    </h3>
+                    <p className="font-comic text-white/90">
+                      {lesson.description}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
-      
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div className={`
-          md:col-span-2 
-          ${colorMode === 'dark' ? 'bg-gray-800/80' : 'bg-white/80'} 
-          backdrop-blur-sm p-6 rounded-xl shadow-md border
-          ${colorMode === 'dark' ? 'border-gray-700' : 'border-gray-100'}
-          h-[80vh]
-        `}>
-          <ChatInterface 
-            subject={subjectName} 
-            characterType={subject.character as 'owl' | 'robot' | 'book'} 
-            initialMessage={welcomeMessage}
-            useExternalLLM={true}
-            apiEndpoint="https://openai-proxytest-1.onrender.com/chat"
-            systemRole={subject.systemRole}
-          />
+    );
+  }
+
+  // Regular subject page for older kids
+  return (
+    <div className="container mx-auto py-6">
+      <div className="flex items-center mb-6">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={() => navigate('/')}
+          className="mr-4"
+        >
+          <ArrowLeft className="h-5 w-5" />
+        </Button>
+        <div className="flex items-center">
+          <div className={`p-3 rounded-full ${subject.color} mr-4`}>
+            <subject.icon className="h-8 w-8 text-white" />
+          </div>
+          <div>
+            <h1 className={`${fontClass} text-2xl md:text-3xl font-bold`}>
+              {subject.name}
+            </h1>
+            <p className={`${fontClass} text-gray-600 dark:text-gray-300`}>
+              {subject.description}
+            </p>
+          </div>
         </div>
-        
-        <div className="space-y-6">
-          <DailyActivityCard
-            activity={activity}
-            subjectColor={subject.color}
-            translationKey={subject.translationKey?.toLowerCase()}
-          />
-          
-          <ProgressTracker 
-            progress={65} 
-            stars={3} 
-            subject={subjectName} 
-          />
-        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Sample lessons for older kids */}
+        {[1, 2, 3, 4, 5, 6].map((lessonNum) => (
+          <div
+            key={lessonNum}
+            className={`
+              ${colorMode === 'dark' ? 'bg-gray-800' : 'bg-white'} 
+              rounded-lg p-6 shadow-md hover:shadow-lg transition-shadow
+            `}
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h3 className={`${fontClass} font-bold text-lg`}>
+                Lesson {lessonNum}
+              </h3>
+              <Star className="h-5 w-5 text-yellow-500" />
+            </div>
+            <p className={`${fontClass} text-sm text-gray-600 dark:text-gray-300 mb-4`}>
+              Interactive lesson content here...
+            </p>
+            <Button className="w-full">Start Lesson</Button>
+          </div>
+        ))}
       </div>
     </div>
   );

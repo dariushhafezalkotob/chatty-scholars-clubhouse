@@ -9,6 +9,7 @@ import AuthCard from '@/components/auth/AuthCard';
 import SubjectCard from '@/components/cards/SubjectCard';
 import DailyActivityCard from '@/components/cards/DailyActivityCard';
 import ProgressTracker from '@/components/progress/ProgressTracker';
+import PreschoolLanding from '@/components/preschool/PreschoolLanding';
 import { Button } from '@/components/ui/button';
 
 const subjects = [
@@ -49,7 +50,7 @@ const subjects = [
 const Index = () => {
   const { ageGroup, setAgeGroup, themeClass, colorMode } = useTheme();
   const { translations } = useLanguage();
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const fontClass = ageGroup === 'young' ? 'font-comic' : 'font-nunito';
   
@@ -74,6 +75,13 @@ const Index = () => {
         <AuthCard />
       </div>
     );
+  }
+
+  // Check if user is preschool age (5-6 years old)
+  const isPreschool = user?.childAge && user.childAge >= 5 && user.childAge <= 6;
+  
+  if (isPreschool) {
+    return <PreschoolLanding />;
   }
   
   return (
