@@ -19,35 +19,38 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
       math: {
         video: {
           title: '🔢 Counting Adventure!',
-          story: 'Once upon a time, there was a little bunny who loved to count carrots...',
+          story: 'Once upon a time, there was a little bear who loved to count honey pots...',
           videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
         },
         game: {
-          title: '🎯 Count the Objects!',
-          description: 'Help the bunny count all the carrots!'
-        }
+          title: '🎯 Count with Bear!',
+          description: 'Help the bear count all the honey pots!'
+        },
+        character: '🐻'
       },
       science: {
         video: {
           title: '🌱 Growing Plants!',
-          story: 'Let me tell you about how tiny seeds become big, beautiful plants...',
+          story: 'Let the wise owl tell you about how tiny seeds become big, beautiful plants...',
           videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
         },
         game: {
-          title: '🌿 Plant the Seeds!',
-          description: 'Help water the plants and watch them grow!'
-        }
+          title: '🌿 Plant with Owl!',
+          description: 'Help the owl water the plants and watch them grow!'
+        },
+        character: '🦉'
       },
       english: {
         video: {
           title: '📖 Letter Adventure!',
-          story: 'Come along on a magical journey through the land of letters...',
+          story: 'Come along with the rabbit on a magical journey through the land of letters...',
           videoUrl: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
         },
         game: {
-          title: '🔤 Find the Letters!',
-          description: 'Can you find all the hidden letters?'
-        }
+          title: '🔤 Find Letters with Rabbit!',
+          description: 'Can you help the rabbit find all the hidden letters?'
+        },
+        character: '🐰'
       }
     };
 
@@ -64,11 +67,20 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
     setCurrentPhase('complete');
   };
 
+  const handleFinalComplete = () => {
+    onComplete(); // This will unlock the next lesson
+  };
+
   const renderVideo = () => (
     <div className="text-center">
-      <h2 className="font-comic text-3xl font-bold text-white mb-6 drop-shadow-lg">
-        {lesson.video.title}
-      </h2>
+      <div className="flex items-center justify-center mb-6">
+        <div className="text-6xl mr-4 animate-bounce">
+          {lesson.character}
+        </div>
+        <h2 className="font-comic text-3xl font-bold text-white drop-shadow-lg">
+          {lesson.video.title}
+        </h2>
+      </div>
       
       <div className="bg-black/20 backdrop-blur-sm rounded-3xl p-6 mb-6">
         <div className="aspect-video bg-gradient-to-br from-purple-400 to-pink-400 rounded-2xl flex items-center justify-center mb-4">
@@ -81,10 +93,11 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
               <Play className="w-8 h-8 text-white" />
             </Button>
           ) : (
-            <div className="text-white font-comic text-xl p-8">
-              📺 Playing story video...
+            <div className="text-white font-comic text-xl p-8 text-center">
+              <div className="text-4xl mb-4">{lesson.character}</div>
+              📺 Playing story...
               <br />
-              <small>{lesson.video.story}</small>
+              <div className="text-lg mt-4 italic">"{lesson.video.story}"</div>
             </div>
           )}
         </div>
@@ -94,7 +107,7 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
             <Button
               variant="outline"
               onClick={() => setIsPlaying(false)}
-              className="rounded-full"
+              className="rounded-full bg-white/20 hover:bg-white/30 text-white border-white/30"
             >
               <Pause className="w-4 h-4 mr-2" />
               Pause
@@ -113,9 +126,14 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
 
   const renderGame = () => (
     <div className="text-center">
-      <h2 className="font-comic text-3xl font-bold text-white mb-6 drop-shadow-lg">
-        {lesson.game.title}
-      </h2>
+      <div className="flex items-center justify-center mb-6">
+        <div className="text-6xl mr-4 animate-bounce">
+          {lesson.character}
+        </div>
+        <h2 className="font-comic text-3xl font-bold text-white drop-shadow-lg">
+          {lesson.game.title}
+        </h2>
+      </div>
       
       <div className="bg-white/20 backdrop-blur-sm rounded-3xl p-8 mb-6">
         <p className="font-comic text-xl text-white mb-6">
@@ -127,14 +145,14 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
           {[1, 2, 3, 4, 5, 6].map((item) => (
             <div
               key={item}
-              className="aspect-square bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center cursor-pointer hover:scale-110 transition-transform"
+              className="aspect-square bg-gradient-to-br from-yellow-400 to-orange-400 rounded-2xl flex items-center justify-center cursor-pointer hover:scale-110 transition-transform shadow-lg"
               onClick={() => {
-                // Simple game interaction
+                // Simple game interaction - complete when clicking the last item
                 if (item === 6) handleGameComplete();
               }}
             >
               <span className="text-4xl">
-                {subjectId === 'math' && '🥕'}
+                {subjectId === 'math' && '🍯'}
                 {subjectId === 'science' && '🌱'}
                 {subjectId === 'english' && String.fromCharCode(64 + item)}
               </span>
@@ -143,7 +161,7 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
         </div>
         
         <p className="font-comic text-white/80">
-          Click on the items to play! 🎮
+          Click on all the items to complete the game! 🎮
         </p>
       </div>
     </div>
@@ -152,19 +170,22 @@ const PreschoolLesson = ({ subjectId, lessonNumber, onBack, onComplete }: Presch
   const renderComplete = () => (
     <div className="text-center">
       <h2 className="font-comic text-4xl font-bold text-white mb-6 drop-shadow-lg animate-bounce">
-        🎉 Great Job! 🎉
+        🎉 Fantastic Job! 🎉
       </h2>
       
       <div className="bg-gradient-to-br from-green-400 to-blue-400 rounded-3xl p-8 mb-6">
+        <div className="text-8xl mb-4 animate-bounce">{lesson.character}</div>
         <div className="text-6xl mb-4">⭐</div>
         <p className="font-comic text-xl text-white mb-6">
-          You completed the lesson! You're amazing! 🌟
+          You completed Lesson {lessonNumber}! You're amazing! 🌟
+          <br />
+          <span className="text-lg">The next lesson is now unlocked!</span>
         </p>
         
         <div className="flex justify-center space-x-4">
           <Button
-            onClick={onComplete}
-            className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-lg px-8 py-4"
+            onClick={handleFinalComplete}
+            className="rounded-full bg-yellow-500 hover:bg-yellow-600 text-lg px-8 py-4 font-comic"
           >
             🏠 Back to Lessons
           </Button>
