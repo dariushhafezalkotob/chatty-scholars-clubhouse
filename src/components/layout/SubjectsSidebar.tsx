@@ -108,7 +108,7 @@ const SubjectsSidebar = () => {
 
           <SidebarGroupContent>
             <SidebarMenu>
-              {subjects.map((subject) => (
+              {subjects.filter(subject => !(isPreschool && subject.id === 'history')).map((subject) => (
                 <SidebarMenuItem key={subject.id}>
                   <SidebarMenuButton asChild className="w-full">
                     <NavLink 
