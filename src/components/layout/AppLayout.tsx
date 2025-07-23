@@ -97,7 +97,7 @@ const AppLayout = () => {
                 size="icon" 
                 onClick={() => navigate('/')}
                 aria-label="Go to dashboard"
-                className={`rounded-full ${ageGroup === 'young' ? 'animate-float' : ''} ${isPreschool ? 'bg-white/20 hover:bg-white/30 text-white' : ''}`}
+                className={`rounded-full ${ageGroup === 'young' ? 'animate-float' : ''} ${isPreschool ? colorMode === 'dark' ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-white/30 hover:bg-white/50 text-gray-800' : ''}`}
               >
                 <Home className="h-5 w-5" />
               </Button>
@@ -109,7 +109,7 @@ const AppLayout = () => {
                   size="icon" 
                   onClick={toggleColorMode}
                   aria-label={colorMode === 'light' ? 'Switch to dark mode' : 'Switch to light mode'}
-                  className={`rounded-full ${isPreschool ? 'bg-white/20 hover:bg-white/30 text-white' : ''}`}
+                  className={`rounded-full ${isPreschool ? colorMode === 'dark' ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-white/30 hover:bg-white/50 text-gray-800' : ''}`}
                 >
                   {colorMode === 'light' ? <Moon className="h-5 w-5" /> : <Sun className="h-5 w-5" />}
                 </Button>
@@ -118,7 +118,7 @@ const AppLayout = () => {
                   size="icon"
                   onClick={logout}
                   aria-label="Log out"
-                  className={`rounded-full ${isPreschool ? 'bg-white/20 hover:bg-white/30 text-white' : ''}`}
+                  className={`rounded-full ${isPreschool ? colorMode === 'dark' ? 'bg-white/20 hover:bg-white/30 text-white' : 'bg-white/30 hover:bg-white/50 text-gray-800' : ''}`}
                 >
                   <LogOut className="h-5 w-5" />
                 </Button>
