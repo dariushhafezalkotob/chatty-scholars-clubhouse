@@ -43,10 +43,14 @@
     --coral-pink: 10 90% 80%;
     --sunshine-yellow: 50 90% 80%;
     
-    /* Theme-specific colors for different age groups - Kids */
-    --young-primary: 200 90% 60%;
-    --young-secondary: 150 75% 70%;
-    --young-accent: 50 90% 70%;
+    /* Theme-specific colors for different age groups - Kids - Super Bright & Playful */
+    --young-primary: 210 100% 60%;       /* Bright sky blue */
+    --young-secondary: 45 100% 65%;      /* Sunny yellow */
+    --young-accent: 310 85% 70%;         /* Playful pink */
+    --young-success: 120 75% 55%;        /* Grass green */
+    --young-warning: 25 95% 65%;         /* Orange */
+    --young-info: 190 90% 65%;           /* Turquoise */
+    --young-purple: 270 80% 70%;         /* Purple */
     
     /* Theme-specific colors for different age groups - Teens */
     --teen-primary: 220 70% 50%;

@@ -12,23 +12,23 @@ const PreschoolLanding = () => {
     {
       id: 'english',
       name: 'Language',
-      image: 'https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=400&h=300&fit=crop',
-      color: 'bg-gradient-to-br from-pink-400 to-red-400',
-      shadowColor: 'shadow-pink-400/50'
+      image: '',
+      color: 'bg-gradient-to-br from-pink-500 to-red-500',
+      shadowColor: 'shadow-pink-500/60'
     },
     {
       id: 'math',
-      name: 'Numbers',
-      image: 'https://images.unsplash.com/photo-1493962853295-0fd70327578a?w=400&h=300&fit=crop',
-      color: 'bg-gradient-to-br from-blue-400 to-cyan-400',
-      shadowColor: 'shadow-blue-400/50'
+      name: 'Numbers',  
+      image: '',
+      color: 'bg-gradient-to-br from-blue-500 to-cyan-500',
+      shadowColor: 'shadow-blue-500/60'
     },
     {
       id: 'science',
       name: 'Science',
-      image: 'https://images.unsplash.com/photo-1581090464777-f3220bbe1b8b?w=400&h=300&fit=crop',
-      color: 'bg-gradient-to-br from-green-400 to-emerald-400',
-      shadowColor: 'shadow-green-400/50'
+      image: '',
+      color: 'bg-gradient-to-br from-green-500 to-emerald-500', 
+      shadowColor: 'shadow-green-500/60'
     }
   ];
 
@@ -39,14 +39,15 @@ const PreschoolLanding = () => {
   return (
     <div className="min-h-screen p-6">
       <div className="container mx-auto max-w-4xl">
-        {/* Welcome Message */}
-        <div className="text-center mb-12">
-          <h1 className="font-comic text-4xl md:text-6xl font-bold text-white drop-shadow-lg mb-4 animate-bounce">
-            🌟 Let's Learn! 🌟
+        {/* Welcome Message - More playful */}
+        <div className="text-center mb-12 relative">
+          <h1 className="font-comic text-5xl md:text-7xl font-bold text-white drop-shadow-2xl mb-6 animate-bounce tracking-wide">
+            🌟 Let's Learn & Play! 🌟
           </h1>
-          <p className="font-comic text-xl md:text-2xl text-white/90 drop-shadow-md">
-            Choose what you want to learn today!
+          <p className="font-comic text-2xl md:text-3xl text-white drop-shadow-xl mb-4">
+            Pick your favorite adventure!
           </p>
+          <div className="text-4xl animate-bounce" style={{ animationDelay: '0.5s' }}>🎓</div>
         </div>
 
         {/* Subject Cards */}
@@ -61,12 +62,28 @@ const PreschoolLanding = () => {
           ))}
         </div>
 
-        {/* Fun decorative elements */}
-        <div className="mt-16 flex justify-center space-x-8">
-          <div className="text-6xl animate-bounce" style={{ animationDelay: '0s' }}>🎈</div>
-          <div className="text-6xl animate-bounce" style={{ animationDelay: '0.5s' }}>🎉</div>
-          <div className="text-6xl animate-bounce" style={{ animationDelay: '1s' }}>🌈</div>
-          <div className="text-6xl animate-bounce" style={{ animationDelay: '1.5s' }}>⭐</div>
+        {/* Fun decorative elements - More colorful */}
+        <div className="mt-20 relative">
+          <div className="flex justify-center space-x-8 mb-8">
+            <div className="text-7xl animate-bounce" style={{ animationDelay: '0s' }}>🎈</div>
+            <div className="text-7xl animate-bounce" style={{ animationDelay: '0.5s' }}>🎉</div>
+            <div className="text-7xl animate-bounce" style={{ animationDelay: '1s' }}>🌈</div>
+            <div className="text-7xl animate-bounce" style={{ animationDelay: '1.5s' }}>⭐</div>
+          </div>
+          
+          {/* Additional playful elements */}
+          <div className="flex justify-center space-x-12">
+            <div className="text-5xl animate-pulse">🚀</div>
+            <div className="text-5xl animate-pulse" style={{ animationDelay: '0.7s' }}>🎪</div>
+            <div className="text-5xl animate-pulse" style={{ animationDelay: '1.4s' }}>🎨</div>
+          </div>
+          
+          {/* Encouraging message */}
+          <div className="text-center mt-8">
+            <p className="font-comic text-xl text-white drop-shadow-lg animate-pulse">
+              You're doing amazing! Keep learning! 🏆
+            </p>
+          </div>
         </div>
       </div>
     </div>
